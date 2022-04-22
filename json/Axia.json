@@ -1,0 +1,58 @@
+[
+    {
+        "question": "Hello",
+        "answer": "Hi!, how can I help?" 
+    },
+    {
+        "question": "Hi",
+        "answer": "Hi!, how can I help?" 
+    },
+    {
+        "question": "Hey",
+        "answer": "Hi!, how can I help?" 
+    },
+    {
+        "question": "Good morning",
+        "answer": "Hi!, how can I help?" 
+    },
+    {
+        "question": "Good afternoon",
+        "answer": "Hi!, how can I help?" 
+    },
+    {
+        "question": "What is up",
+        "answer": "Hello, can I offer some assistance?"
+    },
+
+    {
+        "question": "What is Perfumify",
+        "answer": "Perfumify is a website that sells perfumes from brands at a much lower price."
+    },
+
+    {
+        "question": "What are the shipping costs",
+        "answer": "We normally charge Rs 200 for shipping costs."
+    },
+
+    {
+        "question": "How do I delete my account",
+        "answer": "Please head over to the my account page where you will see the option to do so."
+    },
+
+    {
+        "question": "Who are you",
+        "answer": "I am Axia, designed to assist customers with any queries they have."
+    },
+    {
+        "question": "How are you",
+        "answer": "I am fine, how about you fellow human?"
+    },
+    {
+        "question": "Hmm",
+        "answer": "What are you thinking about?"
+    },
+    {
+        "question": "How long does it take to ship to my country?",
+        "answer": "Depending on your country, it can take up to a month but not more than that."
+    }
+]

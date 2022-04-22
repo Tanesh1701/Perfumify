@@ -1,0 +1,25 @@
+{
+    "english": {
+        "fragrances": "fragrances",
+        "about": "about",
+        "contact us": "contact us",
+        "hello": "hello",
+        "The fantasy of": "The fantasy of",
+        "Paradise": "paradise",
+        "Energetic aromatic irresistible":"Energetic aromatic irresistible",
+        "fragrance for all the ways you play":"fragrance for all the ways you play",
+        "Shop Now":"Shop Now"
+    },
+
+    "french": {
+        "fragrances": "Parfums",
+        "about": "à propos",
+        "contact us": "contact",
+        "hello": "bonjour",
+        "The fantasy of": "la fantaisie du",
+        "Paradise": "paradis",
+        "Energetic aromatic irresistible": "Énergique aromatique irrésistible",
+        "fragrance for all the ways you play": "parfum pour toutes vos plaisirs",
+        "Shop Now": "Achetez"
+    }
+}
