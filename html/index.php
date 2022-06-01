@@ -1,3 +1,14 @@
+<?php
+  ob_start();
+  session_start();
+  include("../html/connection.php");
+  include("../html/functions.php");
+
+  $user = check_login($con);
+
+?>
+
+
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -20,10 +31,10 @@
 <body>
     <div class="hero-image">
         <div class="container">
-            <h4 class="headerTitle"><a href="index.html" class="headerTitleLink">Perfumify</a></h4>
+            <h4 class="headerTitle"><a href="index.php" class="headerTitleLink">Perfumify</a></h4>
             <nav>
-                <ul style = "right: 530px;" class="mainLinks">
-                    <li><a href="about.html" class="lang" key="about">About</a></li>
+                <ul style = "right: 470px;" class="mainLinks">
+                    <li><a href="about.php" class="lang" key="about">About</a></li>
                     <div class="dropdown">
                         <button class="dropbtn lang" key = "fragrances">Fragrances
                           <i class="fa fa-caret-down"></i>
@@ -55,13 +66,23 @@
                         </div>
                       </div>
                     <li><a href="contact_us.php" class="lang" key = "contact us">Contact Us</a></li>
-                    <li><a href="login.php">Login</a></li>
-                    <button class="translate" id="english">English</button>
-                    <button class="translate" id="french">French</button>
+                    <?php
+                    if ($user){
+                    ?>
+                      <li><a href="myAccount.php">My Account</a></li>
+                    <?php
+                    } else {
+                    ?>
+                      <li><a href="login.php">Login</a></li>
+                    <?php
+                    }
+                    ?>
+                    <!-- <button class="translate" id="english">English</button>
+                    <button class="translate" id="french">French</button> -->
                 </ul>
                 <ul class="secondaryLinks">
-                    <li><a href="map.html"><span style="color:whitesmoke; font-size:22px;" class="material-icons-outlined">place</span></a></li>
-                    <li><a href="wishlist.html"><span style="color:whitesmoke; font-size:22px;" class="material-icons-outlined">favorite_border</span></a></li>
+                    <li><a href="map.php"><span style="color:whitesmoke; font-size:22px;" class="material-icons-outlined">place</span></a></li>
+                    <li><a href="wishlist.php"><span style="color:whitesmoke; font-size:22px;" class="material-icons-outlined">favorite_border</span></a></li>
                     <li><a href=""><span style="color:whitesmoke; font-size:22px;" class="material-icons-outlined">shopping_bag</span></a></li>
                 </ul>
             </nav>
@@ -212,10 +233,10 @@
                     <div class = "footer-col">
                         <h4>Perfumify</h4>
                         <ul style = "position: relative; right: 40px">
-                            <li><a href="about.html">About Us</a></li>
+                            <li><a href="about.php">About Us</a></li>
                             <li><a href="contact_us.php">Contact Us</a></li>
-                            <li><a href="sitemap.html">Site Map</a></li>
-                            <li><a href="faq.html">FAQ</a></li>
+                            <li><a href="sitemap.php">Site Map</a></li>
+                            <li><a href="faq.php">FAQ</a></li>
                         </ul>
                     </div>
                     <div class = "footer-col">

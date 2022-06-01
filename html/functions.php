@@ -15,10 +15,6 @@ function check_login($con) {
             return $user_data;
         }
     }
-
-    //redirect to login
-    header("Location: login.php");
-    die();
 }
 
 
@@ -51,4 +47,11 @@ function display_product($con, $query){
     }
     return $product_data;   
     
+}
+
+function logout() {
+    unset($_SESSION['user_id']);
+    session_destroy();
+    header("Location: index.php");
+    die();
 }

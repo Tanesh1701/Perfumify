@@ -12,6 +12,7 @@
 
     $query = "select * from products where id = '$pID'";
     $product_data = display_product($con, $query);
+    $user = check_login($con);
 ?>
 
 <html lang="en">
@@ -39,7 +40,7 @@
             <h4 class="headerTitle"><a href="index.php" class="headerTitleLink">Perfumify</a></h4>
             <nav>
                 <ul class="mainLinks">
-                    <li><a href="about.html">About</a></li>
+                    <li><a href="about.php">About</a></li>
                     <div class="dropdown">
                       <button class="dropbtn">Fragrances
                         <i class="fa fa-caret-down"></i>
@@ -51,7 +52,7 @@
                         <div class="row">
                           <div class="column">
                             <h3>General</h3>
-                            <a href="#">Men</a>
+                            <a href="menProducts.php">Men</a>
                             <a href="#">Women</a>
                           </div>
                           <div class="column">
@@ -69,12 +70,22 @@
                         </div>
                       </div>
                     </div>
-                    <li><a href="contact_us.html">Contact Us</a></li>
-                    <li><a href="login.html">Login</a></li>
+                    <li><a href="contact_us.php">Contact Us</a></li>
+                    <?php
+                        if ($user){
+                            ?>
+                            <li><a class="account" href="myAccount.php">My Account</a></li>
+                            <?php
+                        } else {
+                            ?>
+                            <li><a class="loginAnchor" href="login.php">Login</a></li>
+                            <?php
+                        }
+                    ?>
                 </ul>
                 <ul class="secondaryLinks">
-                    <li><a href="map.html"><span style="color:whitesmoke; font-size:22px;" class="material-icons-outlined">place</span></a></li>
-                    <li><a href=""><span style="color:whitesmoke; font-size:22px;" class="material-icons-outlined">favorite_border</span></a></li>
+                    <li><a href="map.php"><span style="color:whitesmoke; font-size:22px;" class="material-icons-outlined">place</span></a></li>
+                    <li><a href="wishlist.php"><span style="color:whitesmoke; font-size:22px;" class="material-icons-outlined">favorite_border</span></a></li>
                     <li><a href=""><span style="color:whitesmoke; font-size:22px;" class="material-icons-outlined">shopping_bag</span></a></li>
                 </ul>
             </nav>
@@ -182,10 +193,10 @@
                 <div class = "footer-col">
                     <h4>Perfumify</h4>
                     <ul style = "position: relative; right: 40px">
-                        <li><a href="about.html">About Us</a></li>
+                        <li><a href="about.php">About Us</a></li>
                         <li><a href="contact_us.php">Contact Us</a></li>
-                        <li><a href="sitemap.html">Site Map</a></li>
-                        <li><a href="faq.html">FAQ</a></li>
+                        <li><a href="sitemap.php">Site Map</a></li>
+                        <li><a href="faq.php">FAQ</a></li>
                     </ul>
                 </div>
                     <div class = "footer-col">

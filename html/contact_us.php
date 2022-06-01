@@ -1,3 +1,13 @@
+<?php
+  ob_start();
+  session_start();
+  include("../html/connection.php");
+  include("../html/functions.php");
+
+  $user = check_login($con);
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -16,7 +26,7 @@
             <h4 class="headerTitle"><a href="index.php" class="headerTitleLink">Perfumify</a></h4>
             <nav>
                 <ul class="mainLinks">
-                    <li><a href="#">About</a></li>
+                    <li><a href="about.html">About</a></li>
                     <div class="dropdown">
                         <button class="dropbtn">Fragrances
                           <i class="fa fa-caret-down"></i>
@@ -28,7 +38,7 @@
                           <div class="row">
                             <div class="column">
                               <h3>General</h3>
-                              <a href="#">Men</a>
+                              <a href="menProducts.php">Men</a>
                               <a href="#">Women</a>
                             </div>
                             <div class="column">
@@ -46,10 +56,21 @@
                           </div>
                         </div>
                       </div>
-                    <li><a href="#">Contact Us</a></li>
+                    <li><a href="contact_us.php">Contact Us</a></li>
+                    <?php
+                        if ($user){
+                            ?>
+                            <li><a class="account" href="myAccount.php">My Account</a></li>
+                            <?php
+                        } else {
+                            ?>
+                            <li><a class="loginAnchor" href="login.php">Login</a></li>
+                            <?php
+                        }
+                    ?>
                 </ul>
                 <ul class="secondaryLinks">
-                    <li><a href="map.html"><span style="color:whitesmoke; font-size:22px;" class="material-icons-outlined">place</span></a></li>
+                    <li><a href="map.php"><span style="color:whitesmoke; font-size:22px;" class="material-icons-outlined">place</span></a></li>
                     <li><a href=""><span style="color:whitesmoke; font-size:22px;"" class="material-icons-outlined">favorite_border</span></a></li>
                     <li><a href=""><span style="color:whitesmoke; font-size:22px;" class="material-icons-outlined">shopping_bag</span></a></li>
                 </ul>

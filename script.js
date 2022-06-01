@@ -1,29 +1,3 @@
-var arrlang = {
-  "english": {
-    "fragrances": "fragrances",
-    "about": "about",
-    "contact us": "contact us",
-    "hello": "hello",
-    "The fantasy of": "The fantasy of",
-    "Paradise": "paradise",
-    "Energetic aromatic irresistible":"Energetic aromatic irresistible",
-    "fragrance for all the ways you play":"fragrance for all the ways you play",
-    "Shop Now":"Shop Now"
-  },
-
-  "french": {
-    "fragrances": "Parfums",
-    "about": "à propos",
-    "contact us": "contact",
-    "hello": "bonjour",
-    "The fantasy of": "la fantaisie du",
-    "Paradise": "paradis",
-    "Energetic aromatic irresistible": "Énergique aromatique irrésistible",
-    "fragrance for all the ways you play": "parfum pour toutes vos plaisirs",
-    "Shop Now": "Achetez"
-  }
-}
-
 const items = document.querySelectorAll('.accordion button');
 
 function toggleAccordion() {
@@ -89,16 +63,6 @@ function toggleLikeIcon(icon) {
 
 function showPanel() {
   $('#sizesIcon').on('click', function() {
-    // if($('.panel').css('right')=='0px'){
-    //     $('.panel').animate({right: '-100%'}, 500);
-    //     // document.getElementById('panelID').style.boxShadow = ''; 
-    //     document.getElementById('panelID').style.display = 'none';  
-    // }else{
-    //     $('.panel').animate({right:0}, 500); 
-    //     // document.getElementById('panelID').style.boxShadow = '0 0 0 100vmax rgba(0,0,0,.3)';
-    //     document.getElementById('panelID').style.display = 'block';    
-    // }
-    
     $('.panel').animate({right:0}, 500); 
     document.getElementById('panelID').style.display = 'block';    
   });
@@ -253,13 +217,15 @@ const alternatives = [
 function query() {
 document.addEventListener("DOMContentLoaded", () => {
   const inputField = document.getElementById("inputMessage");
-  inputField.addEventListener("keydown", (e) => {
-    if (e.code === "Enter") {
-      let input = inputField.value;
-      inputField.value = "";
-      process(input);
-    }
-  });
+  if (inputField) {
+    inputField.addEventListener("keydown", (e) => {
+      if (e.code === "Enter") {
+        let input = inputField.value;
+        inputField.value = "";
+        process(input);
+      }
+    });
+  }
 });
 }
 
@@ -277,14 +243,13 @@ function process(input) {
   .replace(/please /g, "")
   .replace(/ please/g, "")
   .replace(/r u/g, "are you");
-  text = text.charAt(0).toUpperCase() + text.substring(1);
+  text = text.charAt(0).toUpperCase() + text.substring(1); //regex to remove unsupported characters/typos
 
   fetch('../json/Axia.json').then(response => response.json()).then(data => {
       for(var i = 0; i<data.length; i++) {
           if(text === data[i]['question']) {
               found = true;
               reply = data[i]['answer'];
-              //console.log(reply);
               output(input, reply);
               break;
           } else {
@@ -303,6 +268,8 @@ const messagesContainer = document.getElementById("messages");
 const synth = window.speechSynthesis;
 var axiaVolume = 2;
 
+
+// text to speech functionality
 const textToSpeech = (string) => {
   let voice = new SpeechSynthesisUtterance(string);
   var voices = speechSynthesis.getVoices();
@@ -338,10 +305,11 @@ messagesContainer.appendChild(botDiv);
 // Keep messages at most recent
 messagesContainer.scrollTop = messagesContainer.scrollHeight - messagesContainer.clientHeight;
 
-// Fake delay to seem "real"
+// Fake delay to make replies seem "real"
 setTimeout(() => {
   botText.innerText = `${answer}`;
   textToSpeech(answer);
 }, 2000
 )
 }
+

@@ -1,12 +1,11 @@
 <?php
+    ob_start();
     session_start();
-    
     include("../html/connection.php");
     include("../html/functions.php");
 
-    $user_data = check_login($con);
-    $query = "select * from products where sex = 'male'";
-    $product_data = display_product($con, $query);
+    $user = check_login($con);
+
 ?>
 
 <html lang="en">
@@ -14,13 +13,11 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css?family=Material+Icons|Material+Icons+Outlined|Material+Icons+Two+Tone|Material+Icons+Round|Material+Icons+Sharp" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Varela+Round&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../style.css">
-    <title>Perfumify: Men</title>
+    <title>Perfumify: Wishlist</title>
 </head>
-
 <body>
     <header class="header" style="background-color: black; height: 100;">  
         <div class="container">
@@ -59,7 +56,7 @@
                       </div>
                     <li><a href="contact_us.php">Contact Us</a></li>
                     <?php
-                        if ($user_data){
+                        if ($user){
                             ?>
                             <li><a class="account" href="myAccount.php">My Account</a></li>
                             <?php
@@ -79,26 +76,59 @@
         </div>
     </header>
 
-    <h1 class="title">men's perfumes</h1>
+    <h1 class="title">my wishlist</h1>
 
     
     <div class="perfumeList">
     
-        <?php 
-        foreach($product_data as $row)
-        {
-        ?>
         <div class="perfumes">
-            <img class="image" src="<?php echo $row['location'];?>" alt= "<?php echo $row['name'];?>" onclick = "location.href = 'product_details.php?id=' +  <?php echo $row['id'];?>;">
-            <span onclick = "toggleLikeIcon(this)" class="material-icons">favorite_border</span>
-            <div class="container" onclick = "location.href = 'product_details.php?id=' +  <?php echo $row['id'];?>;">
-                <h4><b><?php echo $row['name'];?></b></h4>
-                <p>Rs <?php echo $row['price'];?></p>
+            <img src="../images/men's perfumes/lv_imagination.jpeg" alt="imagination" style="height: 100%; width: 100%; object-fit: cover;">
+            <span class="material-icons">close</span>
+            <div class="container">
+                <h4 style="font-family: 'Varela Round', sans-serif; text-align: center; font-style: normal; text-transform: uppercase; letter-spacing: 0.115385em;"><b>Imagination</b></h4>
+                <p style="font-family: 'Varela Round', sans-serif; text-align: center;">$360.00</p>
             </div>
         </div>
-        <?php
-        }
-        ?>
+        <div class="perfumes">
+            <img src="../images/men's perfumes/lv_imagination.jpeg" alt="imagination" style="height: 100%; width: 100%; object-fit: cover;">
+            <span class="material-icons">close</span>
+            <div class="container">
+                <h4 style="font-family: 'Varela Round', sans-serif; text-align: center; font-style: normal; text-transform: uppercase; letter-spacing: 0.115385em;"><b>Imagination</b></h4>
+                <p style="font-family: 'Varela Round', sans-serif; text-align: center;">$360.00</p>
+            </div>
+        </div>
+        <div class="perfumes">
+            <img src="../images/men's perfumes/lv_imagination.jpeg" alt="imagination" style="height: 100%; width: 100%; object-fit: cover;">
+            <span class="material-icons">close</span>
+            <div class="container">
+                <h4 style="font-family: 'Varela Round', sans-serif; text-align: center; font-style: normal; text-transform: uppercase; letter-spacing: 0.115385em;"><b>Imagination</b></h4>
+                <p style="font-family: 'Varela Round', sans-serif; text-align: center;">$360.00</p>
+            </div>
+        </div>
+        <div class="perfumes">
+            <img src="../images/men's perfumes/lv_imagination.jpeg" alt="imagination" style="height: 100%; width: 100%; object-fit: cover;">
+            <span class="material-icons">close</span>
+            <div class="container">
+                <h4 style="font-family: 'Varela Round', sans-serif; text-align: center; font-style: normal; text-transform: uppercase; letter-spacing: 0.115385em;"><b>Imagination</b></h4>
+                <p style="font-family: 'Varela Round', sans-serif; text-align: center;">$360.00</p>
+            </div>
+        </div>
+        <div class="perfumes">
+            <img src="../images/men's perfumes/lv_imagination.jpeg" alt="imagination" style="height: 100%; width: 100%; object-fit: cover;">
+            <span class="material-icons">close</span>
+            <div class="container">
+                <h4 style="font-family: 'Varela Round', sans-serif; text-align: center; font-style: normal; text-transform: uppercase; letter-spacing: 0.115385em;"><b>Imagination</b></h4>
+                <p style="font-family: 'Varela Round', sans-serif; text-align: center;">$360.00</p>
+            </div>
+        </div>
+        <div class="perfumes">
+            <img src="../images/men's perfumes/lv_imagination.jpeg" alt="imagination" style="height: 100%; width: 100%; object-fit: cover;">
+            <span class="material-icons">close</span>
+            <div class="container">
+                <h4 style="font-family: 'Varela Round', sans-serif; text-align: center; font-style: normal; text-transform: uppercase; letter-spacing: 0.115385em;"><b>Imagination</b></h4>
+                <p style="font-family: 'Varela Round', sans-serif; text-align: center;">$360.00</p>
+            </div>
+        </div>
     </div>
 
     <footer style = "margin-top: 200px;"class = "footer">
@@ -141,8 +171,5 @@
             </div>
         </div>
     </footer>
-
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-<script src="../script.js"></script>
 </body>
 </html>

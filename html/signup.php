@@ -4,6 +4,8 @@ session_start();
     include("../html/connection.php");
     include("../html/functions.php");
 
+    $error = 1;
+
     if($_SERVER['REQUEST_METHOD'] == "POST") {
 
         $signUpUserName = $_POST['signUpUserName'];
@@ -18,16 +20,29 @@ session_start();
             $query = "Insert into users (user_id,user_name,password,email,fullName) values ('$user_id','$signUpUserName','$signUpPassword','$signUpEmail','$signUpUser')";
 
             mysqli_query($con, $query);
-
+            
             sleep(3);
             header("Location: login.php");
-            die();
         } else {
-            echo("Please enter valid info only!");
+            // echo "<script type='text/javascript'>
+            // Swal.fire({
+            //     icon: 'error',
+            //     title: 'Welcome!',
+            //     text: 'You cannot leave any blank fields',
+            //     iconColor: '#FF0065',
+            //     showConfirmButton: false
+            // });
+            // </script>";
+
+            // echo '<script src="//cdn.jsdelivr.net/npm/sweetalert2@11" type="text/javascript">';
+            // echo 'console.log("F")';
+            // echo "Swal.fire({icon: 'error', title: 'error!', text:'Nooo', iconColor: '#FF0065', showConfirmButton: true});";
+            // echo '</script>';
+            $error = 0;
+            
         }
     }
 ?>
-
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -50,37 +65,43 @@ session_start();
             <h2>Perfumify</h2>
             <form action="" method="post">
                 <div class="input-group">
-                    <input type="text" name="signUpUser" id="signUpUser" required>
+                    <input type="text" name="signUpUser" id="signUpUser" required autocomplete="off">
                     <label for="signUpUser">Full name</label>
                 </div>
                 <div class="input-group">
-                    <input type="text" name="signUpUserName" id="signUpUserName" required>
+                    <input type="text" name="signUpUserName" id="signUpUserName" required autocomplete="off">
                     <label for="signUpUserName">Username</label>
                 </div>
                 <div class="input-group">
-                    <input type="text" name="signUpEmail" id="signUpEmail" required>
+                    <input type="text" name="signUpEmail" id="signUpEmail" required autocomplete="off">
                     <label for="signUpEmail">Email</label>
                 </div>
                 <div class="input-group">
-                    <input type="password" name="signUpPassword" id="signUpPassword" required>
+                    <input type="password" name="signUpPassword" id="signUpPassword" required autocomplete="off">
                     <label for="signUpPassword">Password</label>
                 </div>
-                <input onclick = "confirmation()" type="submit" value="Sign Up" class="submit-btn">
+                <input type="submit" value="Sign Up" class="submit-btn">
             </form>
         </div>
     </section>
 
+    <?php
+        if ($error == 0) { 
+    ?>
+
     <script>
-    function confirmation() {
         Swal.fire({
-            icon: 'success',
-            title: 'Welcome!',
-            text: 'You have successfully registered for Perfumify. To proceed, please log in.',
+            icon: 'error',
+            title: 'Error!',
+            text: 'Noo',
             iconColor: '#FF0065',
             showConfirmButton: false
         });
-    }
     </script>
+
+    <?php
+        }
+    ?>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script src="../script.js"></script>

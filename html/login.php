@@ -23,13 +23,10 @@ session_start();
                     if($user_data['password'] === $password) {
 
                         $_SESSION['user_id'] = $user_data['user_id'];
-                        header("Location: logged_in_index.php");
-                        die();
+                        header("Location: index.php");
                     }
                 }
             }
-        } else {
-            echo("Please enter valid info only!");
         }
     }
 ?>
@@ -55,11 +52,11 @@ session_start();
             <h2>Perfumify</h2>
             <form action="" method="post">
                 <div class="input-group">
-                    <input type="text" name="loginUser" id="loginUser" required>
+                    <input type="text" name="loginUser" id="loginUser" required autocomplete="off">
                     <label for="loginUser">Username</label>
                 </div>
                 <div class="input-group">
-                    <input type="password" name="loginPassword" id="loginPassword" required>
+                    <input type="password" name="loginPassword" id="loginPassword" required autocomplete="off">
                     <label for="loginPassword">Password</label>
                 </div>
                 <input type="submit" value="Login" class="submit-btn">

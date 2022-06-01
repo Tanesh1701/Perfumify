@@ -28,7 +28,7 @@ html {
   padding: 0;
   width: auto;
   position: absolute;
-  right: 575px;
+  right: 450px;
   margin-top: 20px;
   list-style: none;
 }
@@ -94,46 +94,6 @@ nav .mainLinks a:hover:after{
 nav {
   float: right;
 }
-
-/* .dropdown {
-  float: left;
-  overflow: hidden;
-}
-
-.dropdown .dropbtn {
-  border: none;
-  outline: none;
-  color: whitesmoke;
-  font-family: var(--font);
-  background-color: inherit;
-  text-transform: uppercase;
-  font-size: 14px;
-  letter-spacing: 0.115385em;
-  padding: 20px 30px;
-}
-
-.dropdown-content {
-  display: none;
-  position: absolute;
-  background-color: black;
-  min-width: 160px;
-  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
-  z-index: 1;
-}
-
-.dropdown-content a {
-  float: none;
-  color: white;
-  padding: 12px 16px;
-  text-decoration: none;
-  display: block;
-  text-align: left;
-  font-family: var(--font);
-}
-
-.dropdown:hover .dropdown-content {
-  display: block;
-} */
 
 .dropdown {
   float: left;
@@ -854,7 +814,7 @@ nav {
 .swal2-popup {
   font-family: var(--font);
   line-height: 1.5;
-  
+  font-size: 14px;
 }
 
 
@@ -1900,6 +1860,15 @@ nav {
   color: black;
   display: none;
   padding: 0px 20px;
+}
+
+#changePassword button, #changeInfo button, #myAccountLogout button {
+  font-family: var(--font);
+  font-size: 15px;
+  width: 20%;
+  position: absolute;
+  top: 80%;
+  right: 5%;
 }
 
 

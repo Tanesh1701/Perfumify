@@ -1,12 +1,11 @@
 <?php
-    session_start();
-    
-    include("../html/connection.php");
-    include("../html/functions.php");
+  ob_start();
+  session_start();
+  include("../html/connection.php");
+  include("../html/functions.php");
 
-    $user_data = check_login($con);
-    $query = "select * from products where sex = 'male'";
-    $product_data = display_product($con, $query);
+  $user = check_login($con);
+
 ?>
 
 <html lang="en">
@@ -14,15 +13,15 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perfumify: Sitemap</title>
+    <link href="https://fonts.googleapis.com/css2?family=Varela+Round&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css?family=Material+Icons|Material+Icons+Outlined|Material+Icons+Two+Tone|Material+Icons+Round|Material+Icons+Sharp" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Varela+Round&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../style.css">
-    <title>Perfumify: Men</title>
 </head>
-
 <body>
-    <header class="header" style="background-color: black; height: 100;">  
+
+    <header class="header" style="background-color: black; height: 100px;">  
         <div class="container">
             <h4 class="headerTitle"><a href="index.php" class="headerTitleLink">Perfumify</a></h4>
             <nav>
@@ -57,9 +56,10 @@
                           </div>
                         </div>
                       </div>
+                     
                     <li><a href="contact_us.php">Contact Us</a></li>
                     <?php
-                        if ($user_data){
+                        if ($user){
                             ?>
                             <li><a class="account" href="myAccount.php">My Account</a></li>
                             <?php
@@ -71,49 +71,28 @@
                     ?>
                 </ul>
                 <ul class="secondaryLinks">
-                <li><a href="map.php"><span style="color:whitesmoke; font-size:22px;" class="material-icons-outlined">place</span></a></li>
-                    <li><a href="wishlist.php"><span style="color:whitesmoke; font-size:22px;" class="material-icons">favorite_border</span></a></li>
+                    <li><a href="map.php"><span style="color:whitesmoke; font-size:22px;" class="material-icons-outlined">place</span></a></li>
+                    <li><a href="wishlist.php"><span style="color:whitesmoke; font-size:22px;"" class="material-icons-outlined">favorite_border</span></a></li>
                     <li><a href=""><span style="color:whitesmoke; font-size:22px;" class="material-icons-outlined">shopping_bag</span></a></li>
                 </ul>
             </nav>
         </div>
     </header>
 
-    <h1 class="title">men's perfumes</h1>
-
-    
-    <div class="perfumeList">
-    
-        <?php 
-        foreach($product_data as $row)
-        {
-        ?>
-        <div class="perfumes">
-            <img class="image" src="<?php echo $row['location'];?>" alt= "<?php echo $row['name'];?>" onclick = "location.href = 'product_details.php?id=' +  <?php echo $row['id'];?>;">
-            <span onclick = "toggleLikeIcon(this)" class="material-icons">favorite_border</span>
-            <div class="container" onclick = "location.href = 'product_details.php?id=' +  <?php echo $row['id'];?>;">
-                <h4><b><?php echo $row['name'];?></b></h4>
-                <p>Rs <?php echo $row['price'];?></p>
-            </div>
-        </div>
-        <?php
-        }
-        ?>
-    </div>
-
-    <footer style = "margin-top: 200px;"class = "footer">
-        <div class = "footerContainer">
-            <div class = "footer-row">
-                <div class = "footer-col">
-                    <h4>Perfumify</h4>
-                    <ul style = "position: relative; right: 40px">
-                        <li><a href="about.php">About Us</a></li>
-                        <li><a href="contact_us.php">Contact Us</a></li>
-                        <li><a href="sitemap.php">Site Map</a></li>
-                        <li><a href="faq.php">FAQ</a></li>
-                    </ul>
-                </div>
-                    <div class = "footer-col">
+    <div class="Sitemap">
+        <h3 style="margin-bottom: 80px;" class="title">Sitemap</h3>
+            <div class = "sitemapContainer">
+                <div class = "sitemap-row">
+                    <div class = "sitemap-col">
+                        <h4>Perfumify</h4>
+                        <ul style = "position: relative; right: 40px">
+                            <li><a href="about.php">About Us</a></li>
+                            <li><a href="contact_us.php">Contact Us</a></li>
+                            <li><a href="sitemap.php">Site Map</a></li>
+                            <li><a href="faq.php">FAQ</a></li>
+                        </ul>
+                    </div>
+                    <div class = "sitemap-col">
                         <h4>Shop Now</h4>
                         <ul style = "position: relative; right: 40px">
                             <li><a href="menProducts.php">Men's Perfumes</a></li>
@@ -125,12 +104,61 @@
                             <li><a href="">Ralph Lauren</a></li>
                         </ul>
                     </div>
-                    <div class = "footer-col">
-                        <h4>Main HQ</h4>
-                        <p>+1 (646) 555-3890</p>
-                        <p>46th Avenue, New York</p>
+                    <div class = "sitemap-col">
+                        <h4>Our Stores</h4>
+                        <ul style = "position: relative; right: 40px">
+                            <li><a href="">Stores</a></li>
+                        </ul>
                     </div>
-                    <div class = "footer-col">
+                    <!-- <div class = "sitemap-col">
+                        <h4>Follow Us</h4>
+                        <div class = "social-links">
+                            <a href=""><i class = "fab fa-facebook-f"></i></a>
+                            <a href=""><i class = "fab fa-twitter"></i></a>
+                            <a href=""><i class = "fab fa-instagram"></i></a>
+                        </div>
+                    </div> -->
+                    <div class="sitemap-col">
+                        <h4>Get Started</h4>
+                        <ul style = "position: relative; right: 40px">
+                            <li><a href="login.php">Login</a></li>
+                            <li><a href="signup.php">Register Now</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+    </div>
+
+    <footer style = "margin-top:50px;" class = "footer">
+        <div class = "footerContainer">
+            <div class = "footer-row">
+                <div class = "footer-col">
+                    <h4>Perfumify</h4>
+                    <ul style = "position: relative; right: 40px">
+                        <li><a href="">About Us</a></li>
+                        <li><a href="contact_us.html">Contact Us</a></li>
+                        <li><a href="sitemap.html">Site Map</a></li>
+                        <li><a href="faq.html">FAQ</a></li>
+                    </ul>
+                </div>
+                <div class = "footer-col">
+                    <h4>Shop Now</h4>
+                    <ul style = "position: relative; right: 40px">
+                        <li><a href="">Men's Perfumes</a></li>
+                        <li><a href="">Women's Perfumes</a></li>
+                        <li><a href="">Chanel</a></li>
+                        <li><a href="">Gucci</a></li>
+                        <li><a href="">Joe Malone</a></li>
+                        <li><a href="">Louis Vuitton</a></li>
+                        <li><a href="">Ralph Lauren</a></li>
+                    </ul>
+                </div>
+                <div class = "footer-col">
+                    <h4>Main HQ</h4>
+                    <p>+1 (646) 555-3890</p>
+                    <p>46th Avenue, New York</p>
+                </div>
+                <div class = "footer-col">
                     <h4>Follow Us</h4>
                     <div class = "social-links">
                         <a href=""><i class = "fab fa-facebook-f"></i></a>
@@ -142,7 +170,5 @@
         </div>
     </footer>
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-<script src="../script.js"></script>
 </body>
 </html>
