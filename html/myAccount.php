@@ -6,23 +6,31 @@
 
   $user = check_login($con);
   $errorOldPassword = $errorNewPassword = 0;
+  $errorUserExists = "";
 
   if (isset($_POST['changeUserInfo'])) {
     
     $fullName = $_POST['changeName'];
     $userName = $_POST['changeUsername'];
     $email = $_POST['changeEmail'];
-    $id = $user['user_id'];
+    $id = $user['id'];
 
-    $query = "Update users set fullName = '$fullName', user_name = '$userName', email = '$email' where user_id = '$id'";
-    mysqli_query($con, $query);
-    header("Refresh:0");
+    $checkUser = "Select * from users where user_name = '$userName'";
+    $queryUsers = mysqli_query($con, $checkUser);
+
+    if (mysqli_num_rows($queryUsers) > 0) {
+        $errorUserExists = "This username is already taken!";
+    } else {
+        $query = "Update users set fullName = '$fullName', user_name = '$userName', email = '$email' where id = '$id'";
+        mysqli_query($con, $query);
+        header("Refresh:0");
+    }
   }
 
   if (isset($_POST['changePasswordbtn'])) {
     $oldPassword = $_POST['oldPassword'];
     $newPassword = $_POST['newPassword'];
-    $id = $user['user_id'];
+    $id = $user['id'];
     $name = $user['fullName'];
     $userEmail = $user['email'];
     $username = $user['user_name'];
@@ -135,18 +143,19 @@
                     <div style="display: flex;">
                         <div class="col-3">
                             <label for="">Full Name:</label>
-                            <input name="changeName" class="effect-1" type="text" placeholder="">
+                            <input name="changeName" class="effect-1" type="text" placeholder="" autocomplete="off">
                             <span class="focus-border"></span>
                         </div>
                         <div class="col-3">
                             <label for="">Username:</label>
-                            <input name="changeUsername" class="effect-1" type="text" placeholder="">
+                            <input name="changeUsername" class="effect-1" type="text" placeholder="" autocomplete="off">
                             <span class="focus-border"></span>
+                            <label style="position:absolute;" id="signUpUserValidation" for=""><?php echo $errorUserExists?></label>
                         </div>
                     </div>
                     <div class="col-3">
                         <label for="">Email:</label>
-                        <input name="changeEmail" class="effect-1" type="text" placeholder="">
+                        <input name="changeEmail" class="effect-1" type="text" placeholder="" autocomplete="off">
                         <span class="focus-border"></span>
                     </div>
                     <div class = "btn-groups">
@@ -160,12 +169,12 @@
                 <form action="" method="post">
                     <div style="float: none;" class="col-3">
                         <label for="">Old Password:</label>
-                        <input name="oldPassword" class="effect-1" type="text">
+                        <input name="oldPassword" class="effect-1" type="text" autocomplete="off">
                         <span class="focus-border"></span>
                     </div>
                     <div class="col-3">
                         <label for="">New Password:</label>
-                        <input name="newPassword" class="effect-1" type="text">
+                        <input name="newPassword" class="effect-1" type="text" autocomplete="off">
                         <span class="focus-border"></span>
                     </div>
                     <div class = "btn-groups">

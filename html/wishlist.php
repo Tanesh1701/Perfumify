@@ -1,10 +1,37 @@
 <?php
-    ob_start();
     session_start();
     include("../html/connection.php");
     include("../html/functions.php");
 
     $user = check_login($con);
+
+    $userId = 0;
+
+    if(isset($user['id'])) {
+        $userId = $user['id'];
+    }
+
+
+    $product_data = [];
+    
+    $wishlistQuery = "select * from wishlist join products on wishlist.perfumeID = products.id where wishlist.userID = '$userId'";
+    $wishlistData = display_product($con, $wishlistQuery);
+
+    if (isset($_POST['product_id'])) {
+        $productId = $_POST['product_id'];
+
+        $query = ("select count(perfumeID) cnt from wishlist where userID = '$userId' and perfumeID = '$productId'");
+        $result = mysqli_query($con, $query);
+        $product_data = mysqli_fetch_assoc($result);
+
+        if($product_data['cnt'] == 1){
+            $query = ("delete from wishlist where userID = '$userId' and perfumeID = '$productId'");
+            $result = mysqli_query($con, $query);
+        } else {
+            $query = ("insert into wishlist (userID,perfumeID) values ('$userId', '$productId')");
+            $result = mysqli_query($con, $query);
+        }
+    }
 
 ?>
 
@@ -15,6 +42,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://fonts.googleapis.com/css?family=Material+Icons|Material+Icons+Outlined|Material+Icons+Two+Tone|Material+Icons+Round|Material+Icons+Sharp" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Varela+Round&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <link rel="stylesheet" href="../style.css">
     <title>Perfumify: Wishlist</title>
 </head>
@@ -77,59 +105,42 @@
     </header>
 
     <h1 class="title">my wishlist</h1>
-
     
     <div class="perfumeList">
-    
-        <div class="perfumes">
-            <img src="../images/men's perfumes/lv_imagination.jpeg" alt="imagination" style="height: 100%; width: 100%; object-fit: cover;">
-            <span class="material-icons">close</span>
-            <div class="container">
-                <h4 style="font-family: 'Varela Round', sans-serif; text-align: center; font-style: normal; text-transform: uppercase; letter-spacing: 0.115385em;"><b>Imagination</b></h4>
-                <p style="font-family: 'Varela Round', sans-serif; text-align: center;">$360.00</p>
+
+        <?php
+            foreach($wishlistData as $row) {
+        ?>
+        <div class="perfumes <?php echo $row['id'];?>">
+            <img class="image" src="<?php echo $row['location'];?>" alt= "<?php echo $row['name'];?>" onclick = "location.href = 'product_details.php?id=' +  <?php echo $row['id'];?>;">
+            <a class="removeFromWishlist" data-data="<?php echo $row['id'];?>" href="javascript:;"><span class="material-icons">close</span></a>
+            <div class="container" onclick = "location.href = 'product_details.php?id=' +  <?php echo $row['id'];?>;">
+                <h4><b><?php echo $row['name'];?></b></h4>
+                <p>Rs <?php echo $row['price'];?></p>
             </div>
         </div>
-        <div class="perfumes">
-            <img src="../images/men's perfumes/lv_imagination.jpeg" alt="imagination" style="height: 100%; width: 100%; object-fit: cover;">
-            <span class="material-icons">close</span>
-            <div class="container">
-                <h4 style="font-family: 'Varela Round', sans-serif; text-align: center; font-style: normal; text-transform: uppercase; letter-spacing: 0.115385em;"><b>Imagination</b></h4>
-                <p style="font-family: 'Varela Round', sans-serif; text-align: center;">$360.00</p>
-            </div>
-        </div>
-        <div class="perfumes">
-            <img src="../images/men's perfumes/lv_imagination.jpeg" alt="imagination" style="height: 100%; width: 100%; object-fit: cover;">
-            <span class="material-icons">close</span>
-            <div class="container">
-                <h4 style="font-family: 'Varela Round', sans-serif; text-align: center; font-style: normal; text-transform: uppercase; letter-spacing: 0.115385em;"><b>Imagination</b></h4>
-                <p style="font-family: 'Varela Round', sans-serif; text-align: center;">$360.00</p>
-            </div>
-        </div>
-        <div class="perfumes">
-            <img src="../images/men's perfumes/lv_imagination.jpeg" alt="imagination" style="height: 100%; width: 100%; object-fit: cover;">
-            <span class="material-icons">close</span>
-            <div class="container">
-                <h4 style="font-family: 'Varela Round', sans-serif; text-align: center; font-style: normal; text-transform: uppercase; letter-spacing: 0.115385em;"><b>Imagination</b></h4>
-                <p style="font-family: 'Varela Round', sans-serif; text-align: center;">$360.00</p>
-            </div>
-        </div>
-        <div class="perfumes">
-            <img src="../images/men's perfumes/lv_imagination.jpeg" alt="imagination" style="height: 100%; width: 100%; object-fit: cover;">
-            <span class="material-icons">close</span>
-            <div class="container">
-                <h4 style="font-family: 'Varela Round', sans-serif; text-align: center; font-style: normal; text-transform: uppercase; letter-spacing: 0.115385em;"><b>Imagination</b></h4>
-                <p style="font-family: 'Varela Round', sans-serif; text-align: center;">$360.00</p>
-            </div>
-        </div>
-        <div class="perfumes">
-            <img src="../images/men's perfumes/lv_imagination.jpeg" alt="imagination" style="height: 100%; width: 100%; object-fit: cover;">
-            <span class="material-icons">close</span>
-            <div class="container">
-                <h4 style="font-family: 'Varela Round', sans-serif; text-align: center; font-style: normal; text-transform: uppercase; letter-spacing: 0.115385em;"><b>Imagination</b></h4>
-                <p style="font-family: 'Varela Round', sans-serif; text-align: center;">$360.00</p>
-            </div>
-        </div>
+        <?php
+            }
+        ?>
     </div>
+
+    <script>
+        $(document).ready(function() {
+            $(".removeFromWishlist").on("click", function() {
+                var link = $(this).data('data');
+                var toRemove = $(this).parent().attr('class');
+                var toRemoveId = toRemove.split(" ")[1];
+                $.ajax({
+                    type: "POST",
+                    url: "wishlist.php",
+                    data: ({product_id: link}),
+                    success: function(data) {
+                        $('.'+toRemoveId).fadeOut(2).remove();
+                    }
+                })
+            })
+        });
+    </script>
 
     <footer style = "margin-top: 200px;"class = "footer">
         <div class = "footerContainer">

@@ -817,6 +817,15 @@ nav {
   font-size: 14px;
 }
 
+#signUpNameValidation, #signUpemailValidation,
+#signUpPwdValidation, #signUpUserValidation {
+  color: red;
+  font-family: var(--font);
+  font-size: 12px;
+  position: relative;
+  bottom: 12px;
+}
+
 
 /* ---------- Contact Us ---------- */
 
@@ -1037,6 +1046,15 @@ nav {
   position: relative;
   bottom: 98%;
   left: 92%;
+}
+
+#likeIcon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100px;
+  height: 100px;
+  border: none;
 }
 
 

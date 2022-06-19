@@ -2,10 +2,10 @@
 
 function check_login($con) {
     
-    if (isset($_SESSION['user_id'])) {
+    if (isset($_SESSION['id'])) {
 
-        $id = $_SESSION['user_id'];
-        $query = "select * from users where user_id = '$id' limit 1";
+        $id = $_SESSION['id'];
+        $query = "select * from users where id = '$id' limit 1";
 
         $result = mysqli_query($con, $query);
 
@@ -15,24 +15,6 @@ function check_login($con) {
             return $user_data;
         }
     }
-}
-
-
-function random_num($length) {
-
-    $text = "";
-
-    if($length < 5) {
-        $length = 5;
-    }
-
-    $len = rand(4, $length);
-
-    for($i = 0; $i < $len; $i++) {
-        $text .= rand(0,9);
-    }
-
-    return $text;
 }
 
 function display_product($con, $query){
@@ -50,7 +32,7 @@ function display_product($con, $query){
 }
 
 function logout() {
-    unset($_SESSION['user_id']);
+    unset($_SESSION['id']);
     session_destroy();
     header("Location: index.php");
     die();

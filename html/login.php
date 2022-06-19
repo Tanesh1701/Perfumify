@@ -4,12 +4,14 @@ session_start();
     include("../html/connection.php");
     include("../html/functions.php");
 
+    $notFoundFlag = 0;
+
     if($_SERVER['REQUEST_METHOD'] == "POST") {
 
         $user_name = $_POST['loginUser'];
         $password = $_POST['loginPassword'];
 
-        if (!empty($user_name) && !empty($password) && !is_numeric($user_name)) {
+        if (!empty($user_name) && !empty($password)) {
 
             //read from database
             $query = "select * from users where user_name = '$user_name' limit 1";
@@ -22,8 +24,10 @@ session_start();
                     $user_data = mysqli_fetch_assoc($result);
                     if($user_data['password'] === $password) {
 
-                        $_SESSION['user_id'] = $user_data['user_id'];
+                        $_SESSION['id'] = $user_data['id'];
                         header("Location: index.php");
+                    } else {
+                        $notFoundFlag = 1;
                     }
                 }
             }
@@ -39,6 +43,7 @@ session_start();
     <title>Perfumify: Login</title>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Varela+Round&display=swap" rel="stylesheet">
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link rel="stylesheet" href="../style.css">
 </head>
 <body>
@@ -64,5 +69,25 @@ session_start();
             </form>
         </div>
     </section>
+
+    <?php
+        if ($notFoundFlag == 1) { 
+    ?>
+
+    <script>
+        Swal.fire({
+            icon: 'error',
+            title: 'Error!',
+            text: 'Credentials not found ! Please enter the correct username and password.',
+            iconColor: '#FF0065',
+            showConfirmButton: false
+        });
+    </script>
+
+    <?php
+        }
+    ?>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 </body>
 </html>

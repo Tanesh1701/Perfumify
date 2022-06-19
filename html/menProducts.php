@@ -4,9 +4,10 @@
     include("../html/connection.php");
     include("../html/functions.php");
 
-    $user_data = check_login($con);
+    $user = check_login($con);
     $query = "select * from products where sex = 'male'";
     $product_data = display_product($con, $query);
+
 ?>
 
 <html lang="en">
@@ -17,6 +18,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css?family=Material+Icons|Material+Icons+Outlined|Material+Icons+Two+Tone|Material+Icons+Round|Material+Icons+Sharp" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Varela+Round&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link rel="stylesheet" href="../style.css">
     <title>Perfumify: Men</title>
 </head>
@@ -59,7 +62,7 @@
                       </div>
                     <li><a href="contact_us.php">Contact Us</a></li>
                     <?php
-                        if ($user_data){
+                        if ($user){
                             ?>
                             <li><a class="account" href="myAccount.php">My Account</a></li>
                             <?php
@@ -90,7 +93,7 @@
         ?>
         <div class="perfumes">
             <img class="image" src="<?php echo $row['location'];?>" alt= "<?php echo $row['name'];?>" onclick = "location.href = 'product_details.php?id=' +  <?php echo $row['id'];?>;">
-            <span onclick = "toggleLikeIcon(this)" class="material-icons">favorite_border</span>
+            <a class="addToWishlist" data-data="<?php echo $row['id'];?>" href="javascript:;"><span onclick = "toggleLikeIcon(this)" class="material-icons wishlistState">favorite_border</span></a>
             <div class="container" onclick = "location.href = 'product_details.php?id=' +  <?php echo $row['id'];?>;">
                 <h4><b><?php echo $row['name'];?></b></h4>
                 <p>Rs <?php echo $row['price'];?></p>
@@ -100,6 +103,40 @@
         }
         ?>
     </div>
+
+    <script>
+        $(document).ready(function() {
+            $(".addToWishlist").on('click', function(e) {
+                var link = $(this).data('data');
+                $.ajax({
+                    type: "POST",
+                    url: "wishlist.php",
+                    data: ({product_id: link}),
+                    success: function(data) {
+                        if(data == '1') {
+                            // Swal.fire({
+                            //     icon: 'success',
+                            //     title: 'Wishlist',
+                            //     text: 'Succcesfully added to your wishlist!',
+                            //     iconColor: '#FF0065',
+                            //     showConfirmButton: false
+                            // });
+                            $(this).children('.wishlistState').css({"color":"black"})
+                        } else {
+                            // Swal.fire({
+                            //     icon: 'success',
+                            //     title: 'Wishlist',
+                            //     text: 'Succcesfully removed from your wishlist!',
+                            //     iconColor: '#FF0065',
+                            //     showConfirmButton: false
+                            // });
+                            $(this).children('.wishlistState').css({"color":"white"})
+                        }
+                    }
+                });
+            });
+        });
+    </script>
 
     <footer style = "margin-top: 200px;"class = "footer">
         <div class = "footerContainer">
