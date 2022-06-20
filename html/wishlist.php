@@ -27,10 +27,13 @@
         if($product_data['cnt'] == 1){
             $query = ("delete from wishlist where userID = '$userId' and perfumeID = '$productId'");
             $result = mysqli_query($con, $query);
+            echo "delete";
         } else {
             $query = ("insert into wishlist (userID,perfumeID) values ('$userId', '$productId')");
             $result = mysqli_query($con, $query);
+            echo "success";
         }
+        exit();
     }
 
 ?>

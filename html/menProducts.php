@@ -4,10 +4,14 @@
     include("../html/connection.php");
     include("../html/functions.php");
 
+    $heartIcon = "favorite_border";
     $user = check_login($con);
     $query = "select * from products where sex = 'male'";
     $product_data = display_product($con, $query);
 
+    $userId =  $user['id'];
+    $wishlistQuery = "select * from wishlist join products on wishlist.perfumeID = products.id where wishlist.userID = '$userId'";
+    $likedProducts = display_product($con, $wishlistQuery);
 ?>
 
 <html lang="en">
@@ -93,7 +97,26 @@
         ?>
         <div class="perfumes">
             <img class="image" src="<?php echo $row['location'];?>" alt= "<?php echo $row['name'];?>" onclick = "location.href = 'product_details.php?id=' +  <?php echo $row['id'];?>;">
-            <a class="addToWishlist" data-data="<?php echo $row['id'];?>" href="javascript:;"><span onclick = "toggleLikeIcon(this)" class="material-icons wishlistState">favorite_border</span></a>
+            <?php
+                foreach($likedProducts as $liked) {
+                    if($row['id'] == $liked['id']) {
+                        $heartIcon = "favorite";
+                        break;
+                        
+            ?>
+                    <?php
+                    } else {
+                        $heartIcon = "favorite_border";
+                    ?>
+
+                    <?php
+                    }
+                    ?>
+
+            <?php
+                }
+            ?>
+            <a class="addToWishlist" data-data="<?php echo $row['id'];?>" href="javascript:;"><span class="material-icons"><?php echo $heartIcon ?></span></a>
             <div class="container" onclick = "location.href = 'product_details.php?id=' +  <?php echo $row['id'];?>;">
                 <h4><b><?php echo $row['name'];?></b></h4>
                 <p>Rs <?php echo $row['price'];?></p>
@@ -104,33 +127,30 @@
         ?>
     </div>
 
+    <?php 
+        foreach($likedProducts as $perfume) {
+    ?>
+        <script>
+            console.log("<?php echo $perfume['name'];?>");
+        </script>
+    <?php
+        }
+    ?>
+
     <script>
         $(document).ready(function() {
             $(".addToWishlist").on('click', function(e) {
                 var link = $(this).data('data');
+                var $this = $(this);
                 $.ajax({
                     type: "POST",
                     url: "wishlist.php",
                     data: ({product_id: link}),
                     success: function(data) {
-                        if(data == '1') {
-                            // Swal.fire({
-                            //     icon: 'success',
-                            //     title: 'Wishlist',
-                            //     text: 'Succcesfully added to your wishlist!',
-                            //     iconColor: '#FF0065',
-                            //     showConfirmButton: false
-                            // });
-                            $(this).children('.wishlistState').css({"color":"black"})
+                        if (data == "success") {
+                        $($this).find('.material-icons').html("favorite");
                         } else {
-                            // Swal.fire({
-                            //     icon: 'success',
-                            //     title: 'Wishlist',
-                            //     text: 'Succcesfully removed from your wishlist!',
-                            //     iconColor: '#FF0065',
-                            //     showConfirmButton: false
-                            // });
-                            $(this).children('.wishlistState').css({"color":"white"})
+                            $($this).find('.material-icons').html("favorite_border");
                         }
                     }
                 });
