@@ -4,12 +4,16 @@
     include("../html/connection.php");
     include("../html/functions.php");
 
+    $userId = 0;
+
     $heartIcon = "favorite_border";
     $user = check_login($con);
     $query = "select * from products where sex = 'male'";
     $product_data = display_product($con, $query);
 
-    $userId =  $user['id'];
+    if(isset($user['id'])) {
+        $userId =  $user['id'];
+    }
     $wishlistQuery = "select * from wishlist join products on wishlist.perfumeID = products.id where wishlist.userID = '$userId'";
     $likedProducts = display_product($con, $wishlistQuery);
 ?>
@@ -127,15 +131,6 @@
         ?>
     </div>
 
-    <?php 
-        foreach($likedProducts as $perfume) {
-    ?>
-        <script>
-            console.log("<?php echo $perfume['name'];?>");
-        </script>
-    <?php
-        }
-    ?>
 
     <script>
         $(document).ready(function() {

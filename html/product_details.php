@@ -9,10 +9,27 @@
     if(isset($_GET["id"])){
         $pID = $_GET["id"];
     }
-
+    $heartIcon = "favorite_border";
     $query = "select * from products where id = '$pID'";
     $product_data = display_product($con, $query);
+    $randomListQuery = "select * from products";
+    $randomList = display_product($con, $randomListQuery);
+    $randomList = \array_filter($randomList, static function ($element) {
+        return $element !== $_GET["id"];
+    });
     $user = check_login($con);
+    if(isset($user['id'])) {
+        $userId =  $user['id'];
+    }
+    $wishlistQuery = "select * from wishlist join products on wishlist.perfumeID = products.id where wishlist.userID = '$userId'";
+    $likedProducts = display_product($con, $wishlistQuery);
+
+    foreach($likedProducts as $liked) {
+        if($product_data[0]['id'] == $liked['id']) {
+            $heartIcon = "favorite";
+            break;
+        }
+    }
 ?>
 
 <html lang="en">
@@ -92,10 +109,6 @@
         </div>
     </header>
 
-<?php
-
-?>
-
     <div class = "main-wrapper">
         <div class = "detailsContainer">
             <div class = "product-div">
@@ -106,7 +119,8 @@
                 </div>
                 <div class = "product-div-right">
                     <p class = "product-name"><?php echo $product_data[0]['name'];?></p>
-                    <span id="detailsIcon" style="cursor: pointer;" onclick = "toggleLikeIcon(this)" class="material-icons">favorite_border</span>
+                    <!-- <span id="detailsIcon" style="cursor: pointer;" onclick = "toggleLikeIcon(this)" class="material-icons">favorite_border</span> -->
+                    <a class="addToWishlist" data-data="<?php echo $product_data[0]['id'];?>" href="javascript:;"><span id="detailsIcon" class="material-icons"><?php echo $heartIcon ?></span></a>
                     <p style="font-family: 'Roboto Slab', serif;" class = "product-price">Rs <?php echo $product_data[0]['price'];?></p>
                     <hr style="margin-top: 40px;" class="detailsHr">
                     <div>
@@ -150,6 +164,27 @@
         </div>
     </div>
 
+    <script>
+        $(document).ready(function() {
+            $(".addToWishlist").on('click', function(e) {
+                var link = $(this).data('data');
+                var $this = $(this);
+                $.ajax({
+                    type: "POST",
+                    url: "wishlist.php",
+                    data: ({product_id: link}),
+                    success: function(data) {
+                        if (data == "success") {
+                        $($this).find('.material-icons').html("favorite");
+                        } else {
+                            $($this).find('.material-icons').html("favorite_border");
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+
 
     <hr class="detailsHr" style="width: 99.9%; margin-top: 100px;">
 
@@ -158,31 +193,24 @@
         <h3 class="title"> You may also like</h3>
         <hr class="detailsHr" style="width: 5%; margin: auto; border: 1px solid #19110B; background-color: #19110B;">
         <div class="perfumeList">
-    
-            <div class="perfumes">
-                <img src="../images/men's perfumes/lv_nuit_de_feu.jpeg" alt="imagination" style="height: 100%; width: 100%; object-fit: cover;">
-                <span style="cursor: pointer;" onclick = "toggleLikeIcon(this)" class="material-icons">favorite_border</span>
-                <div class="container">
-                    <h4 style="font-family: 'Varela Round', sans-serif; text-align: center; font-style: normal; text-transform: uppercase; letter-spacing: 0.115385em;"><b>Nuit De Feu</b></h4>
-                    <p style="font-family: 'Varela Round', sans-serif; text-align: center;">$360.00</p>
+
+            <?php
+                for($i = 0; $i<3; $i++) {
+                    shuffle($randomList);
+            ?>
+                <script>
+                    console.log("<?php echo $randomList[$i]['name'] ?>")
+                </script>
+                <div class="perfumes">
+                    <img src="<?php echo $randomList[$i]['location'];?>" alt="<?php echo $randomList[$i]['name'];?>" onclick = "location.href = 'product_details.php?id=' +  <?php echo $randomList[$i]['id'];?>;" style="height: 100%; width: 100%; object-fit: cover;">
+                    <div class="container" onclick = "location.href = 'product_details.php?id=' +  <?php echo $randomList[$i]['id'];?>;">
+                        <h4 style="font-family: 'Varela Round', sans-serif; text-align: center; font-style: normal; text-transform: uppercase; letter-spacing: 0.115385em;"><b><?php echo $randomList[$i]['name'];?></b></h4>
+                        <p style="font-family: 'Varela Round', sans-serif; text-align: center;"><?php echo $randomList[$i]['price'];?></p>
+                    </div>
                 </div>
-            </div>
-            <div class="perfumes">
-                <img src="../images/men's perfumes/rl_doubleblack_men.png" alt="imagination" style="height: 100%; width: 100%; object-fit: cover;">
-                <span style="cursor: pointer;" onclick = "toggleLikeIcon(this)" class="material-icons">favorite_border</span>
-                <div class="container">
-                    <h4 style="font-family: 'Varela Round', sans-serif; text-align: center; font-style: normal; text-transform: uppercase; letter-spacing: 0.115385em;"><b>Double Black</b></h4>
-                    <p style="font-family: 'Varela Round', sans-serif; text-align: center;">$360.00</p>
-                </div>
-            </div>
-            <div class="perfumes">
-                <img src="../images/men's perfumes/jm_bronzewood&leather.png" alt="imagination" style="height: 100%; width: 100%; object-fit: cover;">
-                <span style="cursor: pointer;" onclick = "toggleLikeIcon(this)" class="material-icons">favorite_border</span>
-                <div class="container">
-                    <h4 style="font-family: 'Varela Round', sans-serif; text-align: center; font-style: normal; text-transform: uppercase; letter-spacing: 0.115385em;"><b>BronzeWood & Leather</b></h4>
-                    <p style="font-family: 'Varela Round', sans-serif; text-align: center;">$360.00</p>
-                </div>
-            </div>
+            <?php
+                }
+            ?>
         </div>
         
 

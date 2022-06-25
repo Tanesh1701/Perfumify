@@ -406,8 +406,115 @@ nav {
   margin-bottom: 80px;
 }
 
-
 /* Home Fourth Section */
+.testimonials {
+  display: flex;
+}
+
+blockquote {
+    padding: 0;
+    margin: 0;
+}
+
+.testimonial-section {
+    padding: 30px;
+    margin-bottom: 60px;
+    font-family: var(--font);
+    font-size: 14px;
+    font-weight: normal;
+    line-height: 1.5;
+}
+
+.testimonial-wrapper.testimonial-wrapper-boxed {
+    max-width: 450px;
+    margin: 0 auto;
+}
+
+.testimonial-wrapper.testimonial-wrapper-fullwidth {
+    max-width: 100%;
+}
+
+
+.t-bq-quote {
+    position: relative;
+    min-height: 250px;
+    border-radius: 10px;
+    box-shadow: 2px 2px 25px #cecece;
+}
+
+.testimonial-quote .t-bq-quote-base {
+    background: url("https://raw.githubusercontent.com/taviskaron/t-div-blockquotes/main/img/hexabump.png") repeat;
+    color: #ffffff;
+    font-weight: bold;
+    padding: 60px;
+    border-radius: 10px;
+}
+
+.testimonial-quote .t-bq-quote-meta {
+    display: flex;
+    flex-direction: row;
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 2px dotted #ffffff;
+}
+
+.testimonial-quote .t-bq-quote-meta .t-bq-quote-author {
+    font-style: normal;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    font-size: 10pt;
+    font-weight: bold;
+}
+
+.testimonial-quote .t-bq-quote-meta .t-bq-quote-author cite {
+    font-style: normal;
+}
+
+.testimonial-quote .t-bq-quote-meta .t-bq-quote-source {
+    font-size: 10pt;
+}
+
+.testimonial-quote .t-bq-quote-qmark {
+    position: absolute;
+    top: 140px;
+    right: 5px;
+    font-size: 280pt;
+    color: #ffffff;
+    opacity: 0.17;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+.testimonial-quote .t-bq-quote-userpic {
+    width: 70px;
+    height: 70px;
+    background: url("https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/emma-chamberlain-bleach-blonde-bob-1651566169.jpg?crop=1.00xw:0.883xh;0,0.0225xh&resize=640:*") center center no-repeat;
+    background-size: cover;
+    border-radius: 50%;
+    margin-right: 20px;
+}
+
+.testimonial-quote .t-bq-quote-userpic2 {
+  width: 70px;
+  height: 70px;
+  background: url("https://giovannicosmetics.com/wp-content/uploads/2020/04/For-Men.jpg") center center no-repeat;
+  background-size: cover;
+  border-radius: 50%;
+  margin-right: 20px;
+}
+
+.testimonial-quote .t-bq-quote-userpic3 {
+  width: 70px;
+  height: 70px;
+  background: url("https://s.marketwatch.com/public/resources/images/MW-HY732_TikTok_ZH_20200121135759.jpg") center center no-repeat;
+  background-size: cover;
+  border-radius: 50%;
+  margin-right: 20px;
+}
+
+/* Home Fifth Section */
 
 
 .mycard {
@@ -1377,6 +1484,7 @@ nav {
   position: absolute;
   left: 80%;
   bottom: 64%;
+  color: black;
 }
 
 .detailsContainer{
@@ -1403,6 +1511,8 @@ nav {
 .img-container img{
   width: 200px;
   margin: 0 auto;
+  margin-left: -75px;
+  margin-top: 50px;
 }
 
 .product-div-right span{
@@ -1475,7 +1585,7 @@ nav {
 .buy-now-btn{
   background-color: #19110b;
   border: 2px solid #000;
-  width: 100%;
+  width: 50%;
 }
 .buy-now-btn:hover{
   background-color: #fff;
@@ -1704,6 +1814,8 @@ nav {
 .cartGroups{
   margin-bottom: 150px;
 }
+
+
 
 
 /* my account */

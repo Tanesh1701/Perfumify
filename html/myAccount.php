@@ -8,6 +8,10 @@
   $errorOldPassword = $errorNewPassword = 0;
   $errorUserExists = "";
 
+  $userId = $user['id'];
+  $wishlistQuery = "select * from wishlist join products on wishlist.perfumeID = products.id where wishlist.userID = '$userId'";
+  $likedProducts = display_product($con, $wishlistQuery);
+
   if (isset($_POST['changeUserInfo'])) {
     
     $fullName = $_POST['changeName'];
@@ -244,7 +248,7 @@
                     </div>
                     <div class="card-single">
                         <div>
-                            <h1 style="font-family: 'Roboto Slab';">10</h1>
+                            <h1 style="font-family: 'Roboto Slab';"><?php echo count($likedProducts)?></h1>
                             <span>Favorites</span>
                         </div>
                        

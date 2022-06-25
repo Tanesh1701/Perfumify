@@ -11,7 +11,6 @@
         $userId = $user['id'];
     }
 
-
     $product_data = [];
     
     $wishlistQuery = "select * from wishlist join products on wishlist.perfumeID = products.id where wishlist.userID = '$userId'";
@@ -106,26 +105,35 @@
             </nav>
         </div>
     </header>
-
-    <h1 class="title">my wishlist</h1>
     
-    <div class="perfumeList">
+    <?php 
+        if(empty($wishlistData)) {
+    ?>
+        <h3 class="title">Your wishlist is empty</h3>
+    <?php 
+        } else {
+    ?>
+            <h1 class="title">my wishlist</h1>
+            <div class="perfumeList">
 
-        <?php
-            foreach($wishlistData as $row) {
-        ?>
-        <div class="perfumes <?php echo $row['id'];?>">
-            <img class="image" src="<?php echo $row['location'];?>" alt= "<?php echo $row['name'];?>" onclick = "location.href = 'product_details.php?id=' +  <?php echo $row['id'];?>;">
-            <a class="removeFromWishlist" data-data="<?php echo $row['id'];?>" href="javascript:;"><span class="material-icons">close</span></a>
-            <div class="container" onclick = "location.href = 'product_details.php?id=' +  <?php echo $row['id'];?>;">
-                <h4><b><?php echo $row['name'];?></b></h4>
-                <p>Rs <?php echo $row['price'];?></p>
+                <?php
+                    foreach($wishlistData as $row) {
+                ?>
+                <div class="perfumes <?php echo $row['id'];?>">
+                    <img class="image" src="<?php echo $row['location'];?>" alt= "<?php echo $row['name'];?>" onclick = "location.href = 'product_details.php?id=' +  <?php echo $row['id'];?>;">
+                    <a class="removeFromWishlist" data-data="<?php echo $row['id'];?>" href="javascript:;"><span class="material-icons">close</span></a>
+                    <div class="container" onclick = "location.href = 'product_details.php?id=' +  <?php echo $row['id'];?>;">
+                        <h4><b><?php echo $row['name'];?></b></h4>
+                        <p>Rs <?php echo $row['price'];?></p>
+                    </div>
+                </div>
+                <?php
+                    }
+                ?>
             </div>
-        </div>
-        <?php
-            }
+        <?php 
+        }
         ?>
-    </div>
 
     <script>
         $(document).ready(function() {

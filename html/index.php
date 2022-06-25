@@ -13,7 +13,7 @@
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css?family=Material+Icons|Material+Icons+Outlined|Material+Icons+Two+Tone|Material+Icons+Round|Material+Icons+Sharp" rel="stylesheet">
@@ -149,8 +149,69 @@
             </div>
         </div>
     </div>
+    <div id="homeFifthSection">
+            <h3 class="title"> Testimonials </h3>
+            <hr class = "sectionBreak" data-content="A description of what has been, and a promise of what is to come. ">
+            <div class="testimonials">
+              <section class="testimonial-section" id="horace">
+                <div class="testimonial-wrapper testimonial-wrapper-boxed">
+                    <div class="t-bq-quote testimonial-quote">
+                        <div class="t-bq-quote-base">
+                            <blockquote class="testimonial-text">
+                              Perfumify changed my life. Easy shipping, and OMG the customer service is unmatched. Definite recommendation for perfumes of all your needs and wants.
+                            </blockquote>
+                            <div class="t-bq-quote-meta">
+                                <div class="t-bq-quote-userpic"></div>
+                                <div class="t-bq-quote-meta-info">
+                                    <div class="t-bq-quote-author"><cite>Emma Chamberlain</cite></div>
+                                    <div class="t-bq-quote-source"><span>Youtuber</span></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+              </section>
+              <section class="testimonial-section" id="horace">
+                  <div class="testimonial-wrapper testimonial-wrapper-boxed">
+                      <div class="t-bq-quote testimonial-quote">
+                          <div class="t-bq-quote-base">
+                              <blockquote class="testimonial-text">
+                                A must-have if you want branded perfumes for cheaper. Anyone missing on Perfumify is definitely missing on a much better deal and easier life.
+                              </blockquote>
+                              <div class="t-bq-quote-meta">
+                                  <div class="t-bq-quote-userpic3"></div>
+                                  <div class="t-bq-quote-meta-info">
+                                      <div class="t-bq-quote-author"><cite>Mark Brown</cite></div>
+                                      <div class="t-bq-quote-source"><span>Tiktoker</span></div>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              </section>
+              <section class="testimonial-section" id="horace">
+                <div class="testimonial-wrapper testimonial-wrapper-boxed">
+                    <div class="t-bq-quote testimonial-quote">
+                        <div class="t-bq-quote-base">
+                            <blockquote class="testimonial-text">
+                              Don't look any further than Perfumify if you want branded perfumes. They have everything from cheap to expensive for every occasion. A big 5 star.
+                            </blockquote>
+                            <div class="t-bq-quote-meta">
+                                <div class="t-bq-quote-userpic2"></div>
+                                <div class="t-bq-quote-meta-info">
+                                    <div class="t-bq-quote-author"><cite>Kyle Ranton</cite></div>
+                                    <div class="t-bq-quote-source"><span>Professional racer</span></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+              </section>
+            </div>
 
-    <div id="homeFourthSection">
+    </div>
+
+    <div id="homeFifthSection">
             <h3 class="title"> Browse Part Of our gallery </h3>
             <hr class = "sectionBreak" data-content="Perfume is the art that makes memory speak.">
             <div class="slider">
