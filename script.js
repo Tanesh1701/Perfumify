@@ -270,18 +270,6 @@ function initMap() {
 
 
 
-function toggleLikeIcon(icon) {
-  if(icon.innerHTML == "favorite_border") {
-    icon.innerHTML = "favorite";
-  } else {
-    icon.innerHTML = "favorite_border";
-  }
-  document.onselectstart = function() { return false; };
-  return false;
-}
-
-
-
 function showPanel() {
   $('#sizesIcon').on('click', function() {
     $('.panel').animate({right:0}, 500); 
@@ -339,17 +327,12 @@ function changeQuantity() {
   var increment = document.querySelectorAll('span.input-number-increment');
   var decrement = document.querySelectorAll('span.input-number-decrement');
   var input = document.querySelectorAll('input.input-number');
-  var unitPrice = document.querySelectorAll('td.unitPrice');
-  var subtotal = document.querySelectorAll('td.sub-total');
 
   increment.forEach(function(add, i) {
     add.addEventListener('click', function() {
       input[i].value = parseInt(input[i].value) + 1;
-      console.log(unitPrice[i].innerHTML);
-      subtotal[i].innerHTML = 'Rs ' + input[i].value * parseInt(unitPrice[i].innerHTML.split(' ')[1]);
       if (input[i].value > 5) {
         input[i].value = 5;
-        subtotal[i].innerHTML = 'Rs ' + unitPrice[i].innerHTML.split(' ')[1] * 5;
       }
     })
   })
@@ -357,10 +340,8 @@ function changeQuantity() {
   decrement.forEach(function(substract, i) {
     substract.addEventListener('click', function() {
       input[i].value = parseInt(input[i].value) - 1;
-      subtotal[i].innerHTML = 'Rs ' + parseInt(subtotal[i].innerHTML.split(' ')[1] - unitPrice[i].innerHTML.split(' ')[1]);
       if (input[i].value < 1) {
         input[i].value = 1;
-        subtotal[i].innerHTML = unitPrice[i].innerHTML;
       }
     })
   })

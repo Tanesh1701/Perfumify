@@ -6,6 +6,58 @@
 
   $user = check_login($con);
 
+  $userId = 0;
+  if(isset($user['id'])) {
+    $userId = $user['id'];
+  }
+
+  $cartQuery = "select * from cart join products on cart.perfumeID = products.id where cart.userID = '$userId'";
+  $cartData = display_product($con, $cartQuery);
+  $cartLength = count($cartData);
+
+  if(isset($_POST['perfume_id']) and isset($_POST['quantity'])) {
+    $perfumeId = $_POST['perfume_id'];
+    $quantity = $_POST['quantity'];
+
+    $itemExistsQuery = "select count(perfumeID) cnt from cart where userID = '$userId' and perfumeID = '$perfumeId'";
+    $itemExistsresult = mysqli_query($con, $itemExistsQuery);
+    $itemExistsData = mysqli_fetch_assoc($itemExistsresult);
+
+    if($itemExistsData['cnt'] == 1) {
+        $incrementQuery = "update cart set quantity=quantity+'$quantity' where userID = '$userId' and perfumeID = '$perfumeId' and quantity<5";
+        $incrementResult = mysqli_query($con, $incrementQuery);
+    } else {
+        $query = "insert into cart (userID,perfumeID,quantity) values ('$userId', '$perfumeId', '$quantity')";
+        $result = mysqli_query($con, $query);
+        echo "success";
+    }
+    exit();
+  }
+
+  if(isset($_POST['delete'])) {
+    $perfumeId = $_POST['delete'];
+    $deleteQuery = "delete from cart where userID = '$userId' and perfumeID = '$perfumeId'";
+    $deleteResult = mysqli_query($con, $deleteQuery);
+    echo "deleted";
+    exit();
+  }
+
+  if(isset($_POST['decrement'])){
+    $perfumeId = $_POST['decrement'];
+    $decrementQuery = "update cart set quantity=quantity-1 where userID = '$userId' and perfumeID = '$perfumeId' and quantity>1";
+    $decrementResult = mysqli_query($con, $decrementQuery);
+    echo "decremented";
+    exit(); 
+  }
+
+  if(isset($_POST['increment'])){
+    $perfumeId = $_POST['increment'];
+    $incrementQuery = "update cart set quantity=quantity+1 where userID = '$userId' and perfumeID = '$perfumeId' and quantity<5";
+    $incrementResult = mysqli_query($con, $incrementQuery);
+    echo "incremented";
+    exit(); 
+  }
+
 ?>
 
 
@@ -81,7 +133,7 @@
 
     <div class="cartHeader">
         <h1 class="cartTitle">Shopping Cart</h1>
-        <h1 class="cartTitle">Items: 3</h1>
+        <h1 class="cartTitle">Items: <?php echo $cartLength ?></h1>
     </div>
     <hr class="detailsHr" style="width: 85%; margin: auto;">
     <div class="cartBody">
@@ -92,59 +144,81 @@
                 <th>Price</th>
                 <th>Sub-total</th>
             </tr>
-            <tr>
-                <td>
-                    <div class="cartProductDetails">
-                        <img src="../images/men's perfumes/lv_afternoon_swim.jpeg" alt="">
-                        <div style="margin-top: 25px;">
-                            <p>Afternoon Swim</p>
-                            <p style="font-size: 15px;">Louis Vuitton</p>
-                            <small>Remove</small>
-                        </div>
-                    </div>
-                </td>
-                <td>
-                    <span class="input-number-decrement">–</span><input class="input-number" type="text" value="1" min="1" max="5"><span class="input-number-increment">+</span>
-                </td>
-                <td class = "unitPrice">Rs 10000</td>
-                <td class="sub-total">Rs 10000</td>
-            </tr>
-            <tr>
-                <td>
-                    <div class="cartProductDetails">
-                        <img src="../images/men's perfumes/jm_blackberry&bay.png" alt="">
-                        <div style="margin-top: 25px;">
-                            <p>Blackberry & Bay</p>
-                            <p style="font-size: 15px;">Joe Malone</p>
-                            <small>Remove</small>
-                        </div>
-                    </div>
-                </td>
-                <td>
-                    <span class="input-number-decrement">–</span><input class="input-number" type="text" value="1" min="1" max="5"><span class="input-number-increment">+</span>
-                </td>
-                <td class = "unitPrice">Rs 10000</td>
-                <td class="sub-total">Rs 10000</td>
-            </tr>
-            <tr>
-                <td>
-                    <div class="cartProductDetails">
-                        <img src="../images/women's perfumes/rl_magnolia.png" alt="">
-                        <div style="margin-top: 25px;">
-                            <p>Magnolia</p>
-                            <p style="font-size: 15px;">Ralph Lauren</p>
-                            <small>Remove</small>
-                        </div>
-                    </div>
-                </td>
-                <td>
-                    <span class="input-number-decrement">–</span><input class="input-number" type="text" value="1" min="1" max="5"><span class="input-number-increment">+</span>
-                </td>
-                <td class = "unitPrice">Rs 8000</td>
-                <td class="sub-total">Rs 8000</td>
-            </tr>
+            <?php 
+                foreach($cartData as $cartItem) {
+            ?>
+                    <tr class="<?php echo $cartItem['id']?>">
+                        <td>
+                            <div class="cartProductDetails">
+                                <img src="<?php echo $cartItem['location']?>" alt="">
+                                <div style="margin-top: 25px;">
+                                    <p><?php echo $cartItem['name']?></p>
+                                    <p style="font-size: 15px;"><?php echo $cartItem['brand']?></p>
+                                    <small data-data="<?php echo $cartItem['id'] ?>" class="removeFromCart">Remove</small>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <span data-data="<?php echo $cartItem['id'] ?>" class="input-number-decrement">–</span><input id="inputQuantity" class="input-number" type="text" value="<?php echo $cartItem['quantity']?>" min="1" max="5"><span data-data="<?php echo $cartItem['id'] ?>" class="input-number-increment">+</span>
+                        </td>
+                        <td class = "unitPrice">Rs <?php echo $cartItem['price']?></td>
+                        <td class="sub-total">Rs <?php echo ($cartItem['price'] * $cartItem['quantity'])?></td>
+                    </tr>
+            <?php
+                }
+            ?>
         </table>
     </div>
+
+    <script>
+        $(document).ready(function() {
+            $('.removeFromCart').on('click', function() {
+                var idRemoval = $(this).data('data');
+                $.ajax({
+                    url: "cart.php",
+                    type: "POST",
+                    data: ({delete: idRemoval}),
+                    success: function(data) {
+                        if (data == "deleted") {
+                            $('.' + idRemoval).fadeOut(2).remove();
+                        }
+                    }
+                })
+            })
+        })
+
+        $(document).ready(function() {
+            $('.input-number-decrement').on('click', function() {
+                var decrement = $(this).data('data');
+                $.ajax({
+                    url: "cart.php",
+                    type: "POST",
+                    data: ({decrement: decrement}),
+                    success: function(data) {
+                        if(data == "decremented") {
+                            
+                        }
+                    }
+                })
+            })
+        })
+
+        $(document).ready(function() {
+            $('.input-number-increment').on('click', function() {
+                var increment = $(this).data('data');
+                $.ajax({
+                    url: "cart.php",
+                    type: "POST",
+                    data: ({increment: increment}),
+                    success: function(data) {
+                        if(data == "incremented") {
+                           
+                        }
+                    }
+                })
+            })
+        })
+    </script>
 
 
     <div class="cartGroups">

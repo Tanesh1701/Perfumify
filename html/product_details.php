@@ -42,6 +42,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="../style.css">
     <title>Buy Now</title>
@@ -103,7 +104,7 @@
                 <ul class="secondaryLinks">
                     <li><a href="map.php"><span style="color:whitesmoke; font-size:22px;" class="material-icons-outlined">place</span></a></li>
                     <li><a href="wishlist.php"><span style="color:whitesmoke; font-size:22px;" class="material-icons-outlined">favorite_border</span></a></li>
-                    <li><a href=""><span style="color:whitesmoke; font-size:22px;" class="material-icons-outlined">shopping_bag</span></a></li>
+                    <li><a href="cart.php"><span style="color:whitesmoke; font-size:22px;" class="material-icons-outlined">shopping_bag</span></a></li>
                 </ul>
             </nav>
         </div>
@@ -151,13 +152,13 @@
                     </div>
                     <div class="productQtyDiv">
                         <p>Quantity</p>
-                        <input class="pQuantity" type="number" value="1" min="1" max="5">
+                        <input id="cartQty" class="pQuantity" type="number" value="1" min="1" max="5">
                     </div>
                     <hr style="margin-bottom: 40px;" class="detailsHr">
                     <p class = "product-description"><?php echo $product_data[0]['description'];?></p>
                     
                     <div class = "btn-groups">
-                        <button style="font-family: var(--font); font-size: 15px;" type = "button" class = "buy-now-btn">Add To Cart</button>
+                        <button style="font-family: var(--font); font-size: 15px;" type = "button" id="addToCartBtn" class = "buy-now-btn">Add To Cart</button>
                     </div>
                 </div>
             </div>
@@ -183,6 +184,29 @@
                 });
             });
         });
+
+        $(document).ready(function() {
+            $('#addToCartBtn').on('click', function(e) {
+                var perfume_id = <?php echo $product_data[0]['id']?>;
+                var quantity = $('#cartQty').val();
+                $.ajax({
+                    type: "POST",
+                    url: "cart.php",
+                    data: ({perfume_id: perfume_id, quantity: quantity}),
+                    success: function(data) {
+                        if (data == "success") {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Added to cart!',
+                                text: 'Your desired product has been added to your shopping cart.',
+                                iconColor: '#FF0065',
+                                showConfirmButton: false
+                            });
+                        }
+                    }
+                })
+            })
+        })
     </script>
 
 
@@ -198,9 +222,6 @@
                 for($i = 0; $i<3; $i++) {
                     shuffle($randomList);
             ?>
-                <script>
-                    console.log("<?php echo $randomList[$i]['name'] ?>")
-                </script>
                 <div class="perfumes">
                     <img src="<?php echo $randomList[$i]['location'];?>" alt="<?php echo $randomList[$i]['name'];?>" onclick = "location.href = 'product_details.php?id=' +  <?php echo $randomList[$i]['id'];?>;" style="height: 100%; width: 100%; object-fit: cover;">
                     <div class="container" onclick = "location.href = 'product_details.php?id=' +  <?php echo $randomList[$i]['id'];?>;">

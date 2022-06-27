@@ -84,7 +84,7 @@
                 <ul class="secondaryLinks">
                 <li><a href="map.php"><span style="color:whitesmoke; font-size:22px;" class="material-icons-outlined">place</span></a></li>
                     <li><a href="wishlist.php"><span style="color:whitesmoke; font-size:22px;" class="material-icons">favorite_border</span></a></li>
-                    <li><a href=""><span style="color:whitesmoke; font-size:22px;" class="material-icons-outlined">shopping_bag</span></a></li>
+                    <li><a href="cart.php"><span style="color:whitesmoke; font-size:22px;" class="material-icons-outlined">shopping_bag</span></a></li>
                 </ul>
             </nav>
         </div>
