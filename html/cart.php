@@ -15,6 +15,9 @@
   $cartData = display_product($con, $cartQuery);
   $cartLength = count($cartData);
 
+  $wishlistQuery = "select * from wishlist join products on wishlist.perfumeID = products.id where wishlist.userID = '$userId'";
+  $likedProducts = display_product($con, $wishlistQuery);
+
   if(isset($_POST['perfume_id']) and isset($_POST['quantity'])) {
     $perfumeId = $_POST['perfume_id'];
     $quantity = $_POST['quantity'];
@@ -78,37 +81,38 @@
         <div class="container">
             <h4 class="headerTitle"><a href="index.php" class="headerTitleLink">Perfumify</a></h4>
             <nav>
-                <ul class="mainLinks">
-                    <li><a href="about.php">About</a></li>
+                <ul style = "right: 490px;"  class="mainLinks">
+                    <li><a href="about.php">About Us</a></li>
                     <div class="dropdown">
-                      <button class="dropbtn">Fragrances
-                        <i class="fa fa-caret-down"></i>
-                      </button>
-                      <div class="dropdown-content">
-                        <div class="header">
-                          <h2 style="font-size: 16px;">Categories</h2>
-                        </div>   
-                        <div class="row">
-                          <div class="column">
-                            <h3>General</h3>
-                            <a href="menProducts.php">Men</a>
-                            <a href="#">Women</a>
-                          </div>
-                          <div class="column">
-                            <h3>Brand</h3>
-                            <a href="#">Chanel</a>
-                            <a href="#">Gucci</a>
-                            <a href="#">Joe Malone</a>
-                          </div>
-                          <div class="column">
-                            <h3>Brand</h3>
-                            <a href="#">Louis Vuitton</a>
-                            <a href="#">Prada</a>
-                            <a href="#">Ralph Lauren</a>
+                        <button class="dropbtn">Fragrances
+                          <i class="fa fa-caret-down"></i>
+                        </button>
+                        <div class="dropdown-content">
+                          <div class="header">
+                            <h2 style="font-size: 16px;">Categories</h2>
+                          </div>   
+                          <div class="row">
+                            <div class="column">
+                              <h3>General</h3>
+                              <a href="genderProducts.php">All Products</a>
+                              <a href="genderProducts.php?gender=male">Men</a>
+                              <a href="genderProducts.php?gender=female">Women</a>
+                            </div>
+                            <div class="column">
+                              <h3>Brand</h3>
+                              <a href="brand.php?brand=Chanel">Chanel</a>
+                              <a href="brand.php?brand=Gucci">Gucci</a>
+                              <a href="brand.php?brand=Jo Malone">Jo Malone</a>
+                            </div>
+                            <div class="column">
+                              <h3>Brand</h3>
+                              <a href="brand.php?brand=Louis Vuitton">Louis Vuitton</a>
+                              <a href="brand.php?brand=Prada">Prada</a>
+                              <a href="brand.php?brand=Ralph Lauren">Ralph Lauren</a>
+                            </div>
                           </div>
                         </div>
-                      </div>
-                    </div>
+                      </div> 
                     <li><a href="contact_us.php">Contact Us</a></li>
                     <?php
                         if ($user){
@@ -123,113 +127,134 @@
                     ?>
                 </ul>
                 <ul class="secondaryLinks">
+                    <li><a href="search.php"><span style="color:whitesmoke; font-size:22px;" class="material-icons-outlined">search</span></a></li>
                     <li><a href="map.php"><span style="color:whitesmoke; font-size:22px;" class="material-icons-outlined">place</span></a></li>
-                    <li><a href="wishlist.php"><span style="color:whitesmoke; font-size:22px;"" class="material-icons-outlined">favorite_border</span></a></li>
+                    <?php
+                      if(count($likedProducts) != 0) {
+                    ?>
+                      <li><a style="text-decoration: none;" href="wishlist.php"><span style="color:whitesmoke; font-size:22px;" class="material-icons-outlined">favorite_border</span><span class="wishlistNotEmpty">•</span></a></li>
+                    <?php
+                      } else { 
+                    ?>
+                      <li><a href="wishlist.php"><span style="color:whitesmoke; font-size:22px;" class="material-icons-outlined">favorite_border</span></a></li>
+                    <?php
+                      }
+                    ?>
                     <li><a href=""><span style="color:whitesmoke; font-size:22px;" class="material-icons-outlined">shopping_bag</span></a></li>
                 </ul>
             </nav>
         </div>
     </header>
 
-    <div class="cartHeader">
-        <h1 class="cartTitle">Shopping Cart</h1>
-        <h1 class="cartTitle">Items: <?php echo $cartLength ?></h1>
-    </div>
-    <hr class="detailsHr" style="width: 85%; margin: auto;">
-    <div class="cartBody">
-        <table class="cartTable">
-            <tr>
-                <th>Product Name</th>
-                <th>Quantity</th>
-                <th>Price</th>
-                <th>Sub-total</th>
-            </tr>
-            <?php 
-                foreach($cartData as $cartItem) {
-            ?>
-                    <tr class="<?php echo $cartItem['id']?>">
-                        <td>
-                            <div class="cartProductDetails">
-                                <img src="<?php echo $cartItem['location']?>" alt="">
-                                <div style="margin-top: 25px;">
-                                    <p><?php echo $cartItem['name']?></p>
-                                    <p style="font-size: 15px;"><?php echo $cartItem['brand']?></p>
-                                    <small data-data="<?php echo $cartItem['id'] ?>" class="removeFromCart">Remove</small>
+    <?php 
+        if(!empty($cartData)) {
+    ?>
+        <div class="cartHeader">
+            <h1 class="cartTitle">Shopping Cart</h1>
+            <h1 class="cartTitle">Items: <?php echo $cartLength ?></h1>
+        </div>
+        <hr class="detailsHr" style="width: 85%; margin: auto;">
+        <div class="cartBody">
+            <table class="cartTable">
+                <tr>
+                    <th>Product Name</th>
+                    <th>Quantity</th>
+                    <th>Price</th>
+                    <th>Sub-total</th>
+                </tr>
+                <?php 
+                    foreach($cartData as $cartItem) {
+                ?>
+                        <tr class="<?php echo $cartItem['id']?>">
+                            <td>
+                                <div class="cartProductDetails">
+                                    <img src="<?php echo $cartItem['location']?>" alt="">
+                                    <div style="margin-top: 25px;">
+                                        <p><?php echo $cartItem['name']?></p>
+                                        <p style="font-size: 15px;"><?php echo $cartItem['brand']?></p>
+                                        <small data-data="<?php echo $cartItem['id'] ?>" class="removeFromCart">Remove</small>
+                                    </div>
                                 </div>
-                            </div>
-                        </td>
-                        <td>
-                            <span data-data="<?php echo $cartItem['id'] ?>" class="input-number-decrement">–</span><input id="inputQuantity" class="input-number" type="text" value="<?php echo $cartItem['quantity']?>" min="1" max="5"><span data-data="<?php echo $cartItem['id'] ?>" class="input-number-increment">+</span>
-                        </td>
-                        <td class = "unitPrice">Rs <?php echo $cartItem['price']?></td>
-                        <td class="sub-total">Rs <?php echo ($cartItem['price'] * $cartItem['quantity'])?></td>
-                    </tr>
-            <?php
-                }
-            ?>
-        </table>
-    </div>
-
-    <script>
-        $(document).ready(function() {
-            $('.removeFromCart').on('click', function() {
-                var idRemoval = $(this).data('data');
-                $.ajax({
-                    url: "cart.php",
-                    type: "POST",
-                    data: ({delete: idRemoval}),
-                    success: function(data) {
-                        if (data == "deleted") {
-                            $('.' + idRemoval).fadeOut(2).remove();
-                        }
+                            </td>
+                            <td>
+                                <span data-data="<?php echo $cartItem['id'] ?>" class="input-number-decrement">–</span><input id="inputQuantity" class="input-number" type="text" value="<?php echo $cartItem['quantity']?>" min="1" max="5"><span data-data="<?php echo $cartItem['id'] ?>" class="input-number-increment">+</span>
+                            </td>
+                            <td class = "unitPrice">Rs <?php echo $cartItem['price']?></td>
+                            <td class="sub-total">Rs <?php echo ($cartItem['price'] * $cartItem['quantity'])?></td>
+                        </tr>
+                <?php
                     }
+                ?>
+            </table>
+        </div>
+
+        <script>
+            $(document).ready(function() {
+                $('.removeFromCart').on('click', function() {
+                    var idRemoval = $(this).data('data');
+                    $.ajax({
+                        url: "cart.php",
+                        type: "POST",
+                        data: ({delete: idRemoval}),
+                        success: function(data) {
+                            if (data == "deleted") {
+                                $('.' + idRemoval).fadeOut(2).remove();
+                            }
+                        }
+                    })
                 })
             })
-        })
 
-        $(document).ready(function() {
-            $('.input-number-decrement').on('click', function() {
-                var decrement = $(this).data('data');
-                $.ajax({
-                    url: "cart.php",
-                    type: "POST",
-                    data: ({decrement: decrement}),
-                    success: function(data) {
-                        if(data == "decremented") {
+            $(document).ready(function() {
+                $('.input-number-decrement').on('click', function() {
+                    var decrement = $(this).data('data');
+                    $.ajax({
+                        url: "cart.php",
+                        type: "POST",
+                        data: ({decrement: decrement}),
+                        success: function(data) {
+                            if(data == "decremented") {
+                                
+                            }
+                        }
+                    })
+                })
+            })
+
+            $(document).ready(function() {
+                $('.input-number-increment').on('click', function() {
+                    var increment = $(this).data('data');
+                    $.ajax({
+                        url: "cart.php",
+                        type: "POST",
+                        data: ({increment: increment}),
+                        success: function(data) {
+                            if(data == "incremented") {
                             
+                            }
                         }
-                    }
+                    })
                 })
             })
-        })
-
-        $(document).ready(function() {
-            $('.input-number-increment').on('click', function() {
-                var increment = $(this).data('data');
-                $.ajax({
-                    url: "cart.php",
-                    type: "POST",
-                    data: ({increment: increment}),
-                    success: function(data) {
-                        if(data == "incremented") {
-                           
-                        }
-                    }
-                })
-            })
-        })
-    </script>
+        </script>
 
 
-    <div class="cartGroups">
-        <div style="margin-top: 60px;">
-            <span id="backIcon" class="material-icons">keyboard_backspace</span>
-            <p id="Continuebrowsing">Continue browsing</p>
+        <div class="cartGroups">
+            <div class="continueBrowsingContainer">
+                <span id="backIcon" class="material-icons">keyboard_backspace</span>
+                <p id="Continuebrowsing">Continue browsing</p>
+            </div>
+            <div class = "btn-groups">
+                <a style="text-decoration: none;" href="checkout.html"><button id="goToCheckoutBtn" type = "button" class = "buy-now-btn">Checkout</button></a>
+            </div>
         </div>
-        <div class = "btn-groups">
-            <a href="checkout.html"><button style="font-family: var(--font); font-size: 15px; position: absolute; width: 20%; left: 75%; bottom: calc(-70% + 15px);" type = "button" class = "buy-now-btn">Checkout</button></a>
-        </div>
-    </div>
+    <?php
+        } else {
+    ?>
+            <h3 style="margin-bottom: 208px;" class="title">Your cart is empty</h3>
+    <?php
+        }
+    ?>
 
     <footer style = "height: 200px;"class = "footer">
         <div class = "footerContainer">
@@ -243,24 +268,25 @@
                         <li><a href="faq.php">FAQ</a></li>
                     </ul>
                 </div>
-                    <div class = "footer-col">
-                        <h4>Shop Now</h4>
-                        <ul style = "position: relative; right: 40px">
-                            <li><a href="menProducts.php">Men's Perfumes</a></li>
-                            <li><a href="">Women's Perfumes</a></li>
-                            <li><a href="">Chanel</a></li>
-                            <li><a href="">Gucci</a></li>
-                            <li><a href="">Joe Malone</a></li>
-                            <li><a href="">Louis Vuitton</a></li>
-                            <li><a href="">Ralph Lauren</a></li>
-                        </ul>
-                    </div>
-                    <div class = "footer-col">
-                        <h4>Main HQ</h4>
-                        <p>+1 (646) 555-3890</p>
-                        <p>46th Avenue, New York</p>
-                    </div>
-                    <div class = "footer-col">
+                <div class = "footer-col">
+                    <h4>Shop Now</h4>
+                    <ul style = "position: relative; right: 40px">
+                        <li><a href="genderProducts.php?gender=male">Men's Perfumes</a></li>
+                        <li><a href="genderProducts.php?gender=female">Women's Perfumes</a></li>
+                        <li><a href="brand.php?brand=Chanel">Chanel</a></li>
+                        <li><a href="brand.php?brand=Gucci">Gucci</a></li>
+                        <li><a href="brand.php?brand=Jo Malone">Joe Malone</a></li>
+                        <li><a href="brand.php?brand=Louis Vuitton">Louis Vuitton</a></li>
+                        <li><a href="brand.php?brand=Prada">Prada</a></li>
+                        <li><a href="brand.php?brand=Ralph Lauren">Ralph Lauren</a></li>
+                    </ul>
+                </div>
+                <div class = "footer-col">
+                    <h4>Main HQ</h4>
+                    <p>+1 (646) 555-3890</p>
+                    <p>46th Avenue, New York</p>
+                </div>
+                <div class = "footer-col">
                     <h4>Follow Us</h4>
                     <div class = "social-links">
                         <a href=""><i class = "fab fa-facebook-f"></i></a>

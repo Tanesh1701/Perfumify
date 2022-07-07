@@ -4,8 +4,14 @@
   include("../html/connection.php");
   include("../html/functions.php");
 
+  $userId = 0;
   $user = check_login($con);
+  if(isset($user['id'])) {
+    $userId = $user['id'];
+  }
 
+  $wishlistQuery = "select * from wishlist join products on wishlist.perfumeID = products.id where wishlist.userID = '$userId'";
+  $likedProducts = display_product($con, $wishlistQuery);
 ?>
 
 <html lang="en">
@@ -244,20 +250,21 @@
                           <div class="row">
                             <div class="column">
                               <h3>General</h3>
-                              <a href="menProducts.php">Men</a>
-                              <a href="#">Women</a>
+                              <a href="genderProducts.php">All Products</a>
+                              <a href="genderProducts.php?gender=male">Men</a>
+                              <a href="genderProducts.php?gender=female">Women</a>
                             </div>
                             <div class="column">
                               <h3>Brand</h3>
-                              <a href="#">Chanel</a>
-                              <a href="#">Gucci</a>
-                              <a href="#">Joe Malone</a>
+                              <a href="brand.php?brand=Chanel">Chanel</a>
+                              <a href="brand.php?brand=Gucci">Gucci</a>
+                              <a href="brand.php?brand=Jo Malone">Jo Malone</a>
                             </div>
                             <div class="column">
                               <h3>Brand</h3>
-                              <a href="#">Louis Vuitton</a>
-                              <a href="#">Prada</a>
-                              <a href="#">Ralph Lauren</a>
+                              <a href="brand.php?brand=Louis Vuitton">Louis Vuitton</a>
+                              <a href="brand.php?brand=Prada">Prada</a>
+                              <a href="brand.php?brand=Ralph Lauren">Ralph Lauren</a>
                             </div>
                           </div>
                         </div>
@@ -276,8 +283,19 @@
                     ?>
                 </ul>
                 <ul class="secondaryLinks">
+                    <li><a href="search.php"><span style="color:whitesmoke; font-size:22px;" class="material-icons-outlined">search</span></a></li>
                     <li><a href="map.php"><span style="color:whitesmoke; font-size:22px;" class="material-icons-outlined">place</span></a></li>
-                    <li><a href="wishlist.php"><span style="color:whitesmoke; font-size:22px;"" class="material-icons-outlined">favorite_border</span></a></li>
+                    <?php
+                      if(count($likedProducts) != 0) {
+                    ?>
+                      <li><a style="text-decoration: none;" href="wishlist.php"><span style="color:whitesmoke; font-size:22px;" class="material-icons-outlined">favorite_border</span><span class="wishlistNotEmpty">•</span></a></li>
+                    <?php
+                      } else { 
+                    ?>
+                      <li><a href="wishlist.php"><span style="color:whitesmoke; font-size:22px;" class="material-icons-outlined">favorite_border</span></a></li>
+                    <?php
+                      }
+                    ?>
                     <li><a href=""><span style="color:whitesmoke; font-size:22px;" class="material-icons-outlined">shopping_bag</span></a></li>
                 </ul>
             </nav>
@@ -397,44 +415,45 @@
     </div>
 
 
-    <footer style = "height: 200px;"class = "footer">
+    <footer style = "height: 300px;"class = "footer">
         <div class = "footerContainer">
             <hr style="background-color: #818078;border-top: 1px solid #818078; border-bottom: 1px solid #818078;width: 100%;">
             <div class = "footer-row">
-                <div class = "footer-col">
-                    <h4>Perfumify</h4>
-                    <ul style = "position: relative; right: 40px">
-                        <li><a href="about.php">About Us</a></li>
-                        <li><a href="contact_us.php">Contact Us</a></li>
-                        <li><a href="sitemap.php">Site Map</a></li>
-                        <li><a href="faq.php">FAQ</a></li>
-                    </ul>
-                </div>
-                    <div class = "footer-col">
-                        <h4>Shop Now</h4>
-                        <ul style = "position: relative; right: 40px">
-                            <li><a href="">Men's Perfumes</a></li>
-                            <li><a href="">Women's Perfumes</a></li>
-                            <li><a href="">Chanel</a></li>
-                            <li><a href="">Gucci</a></li>
-                            <li><a href="">Joe Malone</a></li>
-                            <li><a href="">Louis Vuitton</a></li>
-                            <li><a href="">Ralph Lauren</a></li>
-                        </ul>
-                    </div>
-                    <div class = "footer-col">
-                        <h4>Main HQ</h4>
-                        <p>+1 (646) 555-3890</p>
-                        <p>46th Avenue, New York</p>
-                    </div>
-                    <div class = "footer-col">
-                    <h4>Follow Us</h4>
-                    <div class = "social-links">
-                        <a href=""><i class = "fab fa-facebook-f"></i></a>
-                        <a href=""><i class = "fab fa-twitter"></i></a>
-                        <a href=""><i class = "fab fa-instagram"></i></a>
-                    </div>
-                </div>
+                  <div class = "footer-col">
+                      <h4>Perfumify</h4>
+                      <ul style = "position: relative; right: 40px">
+                          <li><a href="about.php">About Us</a></li>
+                          <li><a href="contact_us.php">Contact Us</a></li>
+                          <li><a href="sitemap.php">Site Map</a></li>
+                          <li><a href="faq.php">FAQ</a></li>
+                      </ul>
+                  </div>
+                  <div class = "footer-col">
+                      <h4>Shop Now</h4>
+                      <ul style = "position: relative; right: 40px">
+                          <li><a href="genderProducts.php?gender=male">Men's Perfumes</a></li>
+                          <li><a href="genderProducts.php?gender=female">Women's Perfumes</a></li>
+                          <li><a href="brand.php?brand=Chanel">Chanel</a></li>
+                          <li><a href="brand.php?brand=Gucci">Gucci</a></li>
+                          <li><a href="brand.php?brand=Jo Malone">Jo Malone</a></li>
+                          <li><a href="brand.php?brand=Louis Vuitton">Louis Vuitton</a></li>
+                          <li><a href="brand.php?brand=Prada">Prada</a></li>
+                          <li><a href="brand.php?brand=Ralph Lauren">Ralph Lauren</a></li>
+                      </ul>
+                  </div>
+                  <div class = "footer-col">
+                      <h4>Main HQ</h4>
+                      <p>+1 (646) 555-3890</p>
+                      <p>46th Avenue, New York</p>
+                  </div>
+                  <div class = "footer-col">
+                      <h4>Follow Us</h4>
+                      <div class = "social-links">
+                          <a href=""><i class = "fab fa-facebook-f"></i></a>
+                          <a href=""><i class = "fab fa-twitter"></i></a>
+                          <a href=""><i class = "fab fa-instagram"></i></a>
+                      </div>
+                  </div>
             </div>
         </div>
     </footer>

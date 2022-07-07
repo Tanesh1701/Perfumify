@@ -170,6 +170,14 @@ nav {
   clear: both;
 }
 
+.wishlistNotEmpty {
+  color: #FF0065;
+  text-decoration: none;
+  position: absolute;
+  top: 3.2%;
+  font-size: 25px;
+}
+
 /* Responsive layout - makes the three columns stack on top of each other instead of next to each other */
 @media screen and (max-width: 600px) {
   .column {
@@ -203,6 +211,12 @@ nav {
   position: absolute;
   left: 720px;
   top: 140px;
+}
+
+.HomeHeaderImage img {
+  width: 80%;
+  height: 80%;
+  object-fit: cover;
 }
 
 #homeTextContainer{
@@ -1099,7 +1113,7 @@ blockquote {
 }
 
 
-/* ---------- Men's fragrances Page ---------- */
+/* ---------- Perfumes fragrances Page List---------- */
 
 .perfumes {
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
@@ -1795,24 +1809,39 @@ blockquote {
 
 #backIcon {
   cursor: pointer;
-  margin-left: 70px;
-  margin-right: 20px;
-  position: absolute;
-  bottom: calc(-65% - 22px);
   color: #535253;
-
 }
 
 #Continuebrowsing {
-  margin-left: 8%;
   font-family: var(--font);
   font-size: 15px;
   cursor: pointer;
   color: #535253;
+  vertical-align: middle;
 }
 
+.continueBrowsingContainer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  text-align: right;
+  margin-top: 30px;
+  margin-left: 30px;
+}
+
+#goToCheckoutBtn {
+  font-family: var(--font);
+  text-decoration: none;
+  font-size: 15px; 
+  width: 15%;
+  margin: 0 auto; 
+  margin-top: 100px;
+}
 .cartGroups{
-  margin-bottom: 150px;
+  margin-bottom: 100px;
+  text-align: right;
+  /* display: flex;
+  justify-content: space-between; */
 }
 
 
@@ -2236,4 +2265,107 @@ line-height: 1.5;
 /* Transition */
 .selectDropdown:hover::after {
   color: #FF0065;
+}
+
+
+/* Search page */
+
+.searchForm {
+  margin-top: 50px;
+  text-align: center;
+}
+
+.searchForm .input-group input {
+  width: 600px;
+  margin-bottom: 50px;
+  border: none;
+  border-bottom: 1px solid #000000;
+  outline: none;
+  background-color: transparent;
+  font-family: var(--font);
+  font-size: 1.5em;
+  color: #000;
+  transition: 0.1s all ease-in-out;
+}
+
+.searchForm .input-group input:placeholder-shown {
+  color: #8E8E8E;
+  font-size: 1.5em;
+  letter-spacing: 1px;
+}
+
+.searchForm .input-group input:focus {
+  border-bottom: 4px solid #000000;
+}
+
+.closeSearchBtn {
+  position: absolute;
+  right: 5.33333%;
+  top: 1.4375rem;
+  z-index: 1;
+  font-family: var(--font);
+  text-transform: capitalize;
+  font-size: 15px;
+  cursor: pointer;
+}
+
+.suggestionsSearchContainer {
+  text-align: left;
+  font-family: var(--font);
+  font-size: 14px;
+  margin-left: 28%;
+}
+
+.suggestionsSearchTitle {
+  font-size: 16px;
+  text-decoration: underline;
+  margin-left: 40px;
+  margin-bottom: 35px;
+}
+
+.suggestionsSearch {
+  list-style: none;
+}
+
+.suggestionsSearch li {
+  margin: 15px 0;
+  letter-spacing: 0.11em;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.suggestionsSearch li:hover {
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+/* Search Data */
+.searchData {
+  display: flex;
+  text-align: center;
+  margin: auto;
+  width: 50%;
+  height: 20%;
+  font-family: var(--font);
+  cursor: pointer;
+}
+
+.searchImage img{
+  width: 150px;
+  height: 150px;
+}
+
+.searchItemDetails{
+  margin-top: 15px;
+}
+
+.searchItemDetails p {
+  text-align: left;
+}
+
+.noResults {
+  font-family: var(--font);
+  text-align: center;
+  font-weight: normal;
+  text-decoration: underline;
 }

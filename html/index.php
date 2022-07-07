@@ -4,8 +4,14 @@
   include("../html/connection.php");
   include("../html/functions.php");
 
+  $userId = 0;
   $user = check_login($con);
+  if(isset($user['id'])) {
+    $userId = $user['id'];
+  }
 
+  $wishlistQuery = "select * from wishlist join products on wishlist.perfumeID = products.id where wishlist.userID = '$userId'";
+  $likedProducts = display_product($con, $wishlistQuery);
 ?>
 
 
@@ -46,21 +52,21 @@
                           <div class="row">
                             <div class="column">
                               <h3>General</h3>
-                              <a href="">All Products</a>
-                              <a href="menProducts.php">Men</a>
-                              <a href="#">Women</a>
+                              <a href="genderProducts.php">All Products</a>
+                              <a href="genderProducts.php?gender=male">Men</a>
+                              <a href="genderProducts.php?gender=female">Women</a>
                             </div>
                             <div class="column">
                               <h3>Brand</h3>
-                              <a href="#">Chanel</a>
-                              <a href="#">Gucci</a>
-                              <a href="#">Joe Malone</a>
+                              <a href="brand.php?brand=Chanel">Chanel</a>
+                              <a href="brand.php?brand=Gucci">Gucci</a>
+                              <a href="brand.php?brand=Jo Malone">Jo Malone</a>
                             </div>
                             <div class="column">
                               <h3>Brand</h3>
-                              <a href="#">Louis Vuitton</a>
-                              <a href="#">Prada</a>
-                              <a href="#">Ralph Lauren</a>
+                              <a href="brand.php?brand=Louis Vuitton">Louis Vuitton</a>
+                              <a href="brand.php?brand=Prada">Prada</a>
+                              <a href="brand.php?brand=Ralph Lauren">Ralph Lauren</a>
                             </div>
                           </div>
                         </div>
@@ -81,15 +87,26 @@
                     <button class="translate" id="french">French</button> -->
                 </ul>
                 <ul class="secondaryLinks">
+                    <li><a href="search.php"><span style="color:whitesmoke; font-size:22px;" class="material-icons-outlined">search</span></a></li>
                     <li><a href="map.php"><span style="color:whitesmoke; font-size:22px;" class="material-icons-outlined">place</span></a></li>
-                    <li><a href="wishlist.php"><span style="color:whitesmoke; font-size:22px;" class="material-icons-outlined">favorite_border</span></a></li>
-                    <li><a href=""><span style="color:whitesmoke; font-size:22px;" class="material-icons-outlined">shopping_bag</span></a></li>
+                    <?php
+                      if(count($likedProducts) != 0) {
+                    ?>
+                      <li><a style="text-decoration: none;" href="wishlist.php"><span style="color:whitesmoke; font-size:22px;" class="material-icons-outlined">favorite_border</span><span class="wishlistNotEmpty">•</span></a></li>
+                    <?php
+                      } else { 
+                    ?>
+                      <li><a href="wishlist.php"><span style="color:whitesmoke; font-size:22px;" class="material-icons-outlined">favorite_border</span></a></li>
+                    <?php
+                      }
+                    ?>
+                    <li><a href="cart.php"><span style="color:whitesmoke; font-size:22px;" class="material-icons-outlined">shopping_bag</span></a></li>
                 </ul>
             </nav>
             
         </div>
         <div class="HomeHeaderImage">
-            <img src="../images/men's perfumes/lv_afternoon_swim.jpeg" alt="home perfume" style="width: 80%; height: 80%; object-fit: cover;">
+            <img src="../images/men's perfumes/lv_afternoon_swim.jpeg" alt="home perfume">
         </div>
         <div id="homeTextContainer">
             <p class = "FirstSectionTitle lang" key = "The fantasy of">The Fantasy Of</p>
@@ -98,7 +115,7 @@
             <p class="FirstSectionSubtitle lang" key = "fragrance for all the ways you play">fragrance for all the ways you play.</p>
         </div>
         <div class="homeButton">
-            <a class="homeButtonLink lang" href="#homeSecondSection" key = "Shop Now">Shop Now</a>
+            <a class="homeButtonLink lang" href="genderProducts.php" key = "Shop Now">Shop Now</a>
         </div>
     </div>
 
@@ -181,7 +198,7 @@
                               <div class="t-bq-quote-meta">
                                   <div class="t-bq-quote-userpic3"></div>
                                   <div class="t-bq-quote-meta-info">
-                                      <div class="t-bq-quote-author"><cite>Mark Brown</cite></div>
+                                      <div class="t-bq-quote-author"><cite>Josh Richards</cite></div>
                                       <div class="t-bq-quote-source"><span>Tiktoker</span></div>
                                   </div>
                               </div>
@@ -224,12 +241,11 @@
                   <label class="item" for="t-1">
                     <div class="mycard">
                       <p class="cardtitle">Joe Malone</p>
-                      
                       <div>
                         <img src="../images/men's perfumes/jm_bronzewood&leather.png" alt="nivel5" class="cardimg" />
                       </div>
                       <div>
-                        <p class="carddescription">Bronzewood & Leather</p>
+                        <p onclick = "location.href = 'product_details.php?id=17'" class="carddescription">Bronzewood & Leather</p>
                       </div>
                     </div>
                   </label>
@@ -240,7 +256,7 @@
                         <img src="../images/men's perfumes/prada_lhomme_men.png" alt="nivel5" class="cardimg" />
                       </div>
                       <div>
-                        <p class="carddescription">L'homme</p>
+                        <p onclick = "location.href = 'product_details.php?id=25'" class="carddescription">L'homme</p>
                       </div>
                     </div>
                   </label>
@@ -251,7 +267,7 @@
                         <img src="../images/women's perfumes/jm_englishpear&freesia.png" alt="nivel5" class="cardimg" />
                       </div>
                       <div>
-                        <p class="carddescription">English Pear & Freesia</p>
+                        <p onclick = "location.href = 'product_details.php?id=55'" class="carddescription">English Pear & Freesia</p>
                       </div>
                     </div>
                   </label>
@@ -262,7 +278,7 @@
                         <img src="../images/women's perfumes/lv_spellonyou.png" alt="nivel5" class="cardimg" />
                       </div>
                       <div>
-                        <p class="carddescription">Spell On You</p>
+                        <p onclick = "location.href = 'product_details.php?id=42'" class="carddescription">Spell On You</p>
                       </div>
                     </div>
                   </label>
@@ -273,7 +289,7 @@
                         <img src="../images/women's perfumes/rl_whitelily.png" alt="nivel5" class="cardimg" />
                       </div>
                       <div>
-                        <p class="carddescription">WhiteLily</p>
+                        <p onclick = "location.href = 'product_details.php?id=71'" class="carddescription">WhiteLily</p>
                       </div>
                     </div>
                   </label>
@@ -288,7 +304,7 @@
               </div>
         </div>
 
-        <footer style = "margin-top:50px;" class = "footer">
+        <footer style = "margin-top:100px;" class = "footer">
             <div class = "footerContainer">
                 <div class = "footer-row">
                     <div class = "footer-col">
@@ -303,13 +319,14 @@
                     <div class = "footer-col">
                         <h4>Shop Now</h4>
                         <ul style = "position: relative; right: 40px">
-                            <li><a href="menProducts.php">Men's Perfumes</a></li>
-                            <li><a href="">Women's Perfumes</a></li>
-                            <li><a href="">Chanel</a></li>
-                            <li><a href="">Gucci</a></li>
-                            <li><a href="">Joe Malone</a></li>
-                            <li><a href="">Louis Vuitton</a></li>
-                            <li><a href="">Ralph Lauren</a></li>
+                            <li><a href="genderProducts.php?gender=male">Men's Perfumes</a></li>
+                            <li><a href="genderProducts.php?gender=female">Women's Perfumes</a></li>
+                            <li><a href="brand.php?brand=Chanel">Chanel</a></li>
+                            <li><a href="brand.php?brand=Gucci">Gucci</a></li>
+                            <li><a href="brand.php?brand=Jo Malone">Jo Malone</a></li>
+                            <li><a href="brand.php?brand=Louis Vuitton">Louis Vuitton</a></li>
+                            <li><a href="brand.php?brand=Prada">Prada</a></li>
+                            <li><a href="brand.php?brand=Ralph Lauren">Ralph Lauren</a></li>
                         </ul>
                     </div>
                     <div class = "footer-col">
