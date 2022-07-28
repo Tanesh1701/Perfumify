@@ -271,7 +271,7 @@ function initMap() {
 
 
 function showPanel() {
-  $('#sizesIcon').on('click', function() {
+  $('.filterBtn').on('click', function() {
     $('.panel').animate({right:0}, 500); 
     document.getElementById('panelID').style.display = 'block';    
   });
@@ -291,63 +291,6 @@ function closePanelF() {
 }
 closePanelF();
 
-
-function selectSize() {
-  var optionSize100 = document.getElementsByClassName('size100')[0];
-  var optionSize200 = document.getElementsByClassName('size200')[0];
-  var optionSize100Selected = document.getElementById('selectedSize100');
-  var optionSize200Selected = document.getElementById('selectedSize200');
-
-
-  if(optionSize100) {
-    optionSize100.addEventListener('click', function() {
-      document.getElementsByClassName('productSize')[0].innerHTML = '100ml';
-      $('.panel').animate({right: '-100%'}, 500);
-      optionSize200Selected.style.display = 'none'; 
-      optionSize100Selected.style.display = 'block';
-      document.getElementById('panelID').style.display = 'none';
-    });
-  }
-
-  if(optionSize200) {
-    optionSize200.addEventListener('click', function() {
-      document.getElementsByClassName('productSize')[0].innerHTML = '200ml';
-      $('.panel').animate({right: '-100%'}, 500);
-      optionSize100Selected.style.display = 'none';
-      optionSize200Selected.style.display = 'block'; 
-      document.getElementById('panelID').style.display = 'none';
-    }); 
-  }
-}
-
-selectSize();
-
-
-function changeQuantity() {
-  var increment = document.querySelectorAll('span.input-number-increment');
-  var decrement = document.querySelectorAll('span.input-number-decrement');
-  var input = document.querySelectorAll('input.input-number');
-
-  increment.forEach(function(add, i) {
-    add.addEventListener('click', function() {
-      input[i].value = parseInt(input[i].value) + 1;
-      if (input[i].value > 5) {
-        input[i].value = 5;
-      }
-    })
-  })
-
-  decrement.forEach(function(substract, i) {
-    substract.addEventListener('click', function() {
-      input[i].value = parseInt(input[i].value) - 1;
-      if (input[i].value < 1) {
-        input[i].value = 1;
-      }
-    })
-  })
-}
-
-changeQuantity();
 
 function openPage(pageName,elmnt) {
   var i, tabcontent;

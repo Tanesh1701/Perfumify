@@ -52,7 +52,7 @@
                           <div class="row">
                             <div class="column">
                               <h3>General</h3>
-                              <a href="genderProducts.php">All Products</a>
+                              <a href="genderProducts.php?gender=all">All Products</a>
                               <a href="genderProducts.php?gender=male">Men</a>
                               <a href="genderProducts.php?gender=female">Women</a>
                             </div>
@@ -106,7 +106,7 @@
             
         </div>
         <div class="HomeHeaderImage">
-            <img src="../images/men's perfumes/lv_afternoon_swim.jpeg" alt="home perfume">
+            <img src="../images/men's perfumes/lv_afternoon_swim.png" alt="home perfume">
         </div>
         <div id="homeTextContainer">
             <p class = "FirstSectionTitle lang" key = "The fantasy of">The Fantasy Of</p>

@@ -91,7 +91,7 @@
                     <?php
                       }
                     ?>
-                    <li><a href=""><span style="color:whitesmoke; font-size:22px;" class="material-icons-outlined">shopping_bag</span></a></li>
+                    <li><a href="cart.php"><span style="color:whitesmoke; font-size:22px;" class="material-icons-outlined">shopping_bag</span></a></li>
                 </ul>
             </nav>
         </div>

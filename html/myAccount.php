@@ -12,6 +12,9 @@
   $wishlistQuery = "select * from wishlist join products on wishlist.perfumeID = products.id where wishlist.userID = '$userId'";
   $likedProducts = display_product($con, $wishlistQuery);
 
+  $ordersQuery = "select * from orderdetails join products on orderdetails.perfumeID = products.id where orderdetails.userID = '$userId'";
+  $orders = display_product($con, $ordersQuery);
+
   if (isset($_POST['changeUserInfo'])) {
     
     $fullName = $_POST['changeName'];
@@ -31,9 +34,9 @@
     }
   }
 
-  if (isset($_POST['changePasswordbtn'])) {
-    $oldPassword = $_POST['oldPassword'];
-    $newPassword = $_POST['newPassword'];
+  if (isset($_POST['oldpwd']) and isset($_POST['newpwd'])) {
+    $oldPassword = $_POST['oldpwd'];
+    $newPassword = $_POST['newpwd'];
     $id = $user['id'];
     $name = $user['fullName'];
     $userEmail = $user['email'];
@@ -41,21 +44,19 @@
     $currentPassword = $user['password'];
 
     if ($oldPassword != $currentPassword) {
-        $errorOldPassword = 1;
-    } else {
-        $errorOldPassword = 0;
+        echo "currentPasswordError";
+        exit();
     }
-
     if($newPassword == $currentPassword) {
-        $errorNewPassword = 1;
-    } else {
-        $errorNewPassword = 0;
+        echo "newPasswordError";
+        exit();
     }
 
     if (($oldPassword == $currentPassword) && ($newPassword != $currentPassword)) {
-        $query = "Update users set fullName = '$name', user_name = '$username', email = '$userEmail', password = '$newPassword' where user_id = '$id'";
+        $query = "Update users set fullName = '$name', user_name = '$username', email = '$userEmail', password = '$newPassword' where id = '$id'";
         mysqli_query($con, $query);
-        header("Refresh:0");
+        echo "success";
+        exit();
     }
   }
 
@@ -111,14 +112,11 @@
                 <li onclick="openPage('chatBot', this)">
                     <span class="material-icons-outlined">chat_bubble_outline</span><span>Chat Now</span>
                 </li>
-                <li>
+                <li onclick="openPage('ordersTable', this)">
                     <span class="material-icons-outlined">shopping_bag</span><span>View Orders</span>
                 </li>
                 <li onclick="openPage('myAccountLogout', this)">
                     <span class="material-icons-outlined">logout</span><span>Logout</span>
-                </li>
-                <li>
-                    <span class="material-icons-outlined">remove_circle_outline</span><span>Delete Account</span>
                 </li>
             </ul>
         </div>
@@ -134,9 +132,8 @@
             </h2>
 
             <div class="user-wrapper">
-                <img src="../nopp.png" width="40px" height="40px" alt="">
                 <div>
-                    <h4><?php echo $user['user_name'] ?></h4>
+                    <h4>Welcome <?php echo $user['user_name'] ?></h4>
                 </div>
             </div>
         </header>
@@ -173,48 +170,63 @@
                 <form action="" method="post">
                     <div style="float: none;" class="col-3">
                         <label for="">Old Password:</label>
-                        <input name="oldPassword" class="effect-1" type="text" autocomplete="off">
+                        <input id="oldPwd" name="oldPassword" class="effect-1" type="text" autocomplete="off">
                         <span class="focus-border"></span>
                     </div>
                     <div class="col-3">
                         <label for="">New Password:</label>
-                        <input name="newPassword" class="effect-1" type="text" autocomplete="off">
+                        <input id="newPwd" name="newPassword" class="effect-1" type="text" autocomplete="off">
                         <span class="focus-border"></span>
                     </div>
                     <div class = "btn-groups">
-                        <button name="changePasswordbtn" type = "submit" class = "buy-now-btn">Save Changes</button>
+                        <button id="changePasswordButton" name="changePasswordbtn" class = "buy-now-btn">Save Changes</button>
                     </div>
                 </form>
                 
             </div>
 
-            <?php 
-                if ($errorOldPassword == 1) {
-            ?>
-                <script>
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error!',
-                        text: 'You have entered the wrong password !',
-                        iconColor: '#FF0065',
-                        showConfirmButton: false
-                    });
-                </script>
-            <?php
-                } else if ($errorNewPassword == 1) {
-            ?>
-                <script>
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error!',
-                        text: 'Your new Password cannot be the same as your old password !',
-                        iconColor: '#FF0065',
-                        showConfirmButton: false
-                    });
-                </script>
-            <?php
-                }
-            ?>
+            <script>
+                $(document).ready(function() {
+                    $('#changePasswordButton').on('click', function(e) {
+                        console.log("hi");
+                        var oldpwd = $("#oldPwd").val();
+                        var newpwd = $("#newPwd").val();
+                        e.preventDefault();
+                        $.ajax({
+                            url: "myAccount.php",
+                            type: "POST",
+                            data: ({oldpwd: oldpwd, newpwd: newpwd}),
+                            success: function(data) {
+                                if (data == "newPasswordError") {
+                                    Swal.fire({
+                                        icon: 'error',
+                                        title: 'Error!',
+                                        text: 'Your new Password cannot be the same as your old password !',
+                                        iconColor: '#FF0065',
+                                        showConfirmButton: false
+                                    });
+                                } else if(data == "currentPasswordError") {
+                                    Swal.fire({
+                                        icon: 'error',
+                                        title: 'Error!',
+                                        text: 'You have entered the wrong password !',
+                                        iconColor: '#FF0065',
+                                        showConfirmButton: false
+                                    });
+                                } else if(data == "success"){
+                                    Swal.fire({
+                                        icon: 'success',
+                                        title: 'Error!',
+                                        text: 'You have successfully changed your password !',
+                                        iconColor: '#FF0065',
+                                        showConfirmButton: false
+                                    });
+                                }
+                            }
+                        })
+                    })
+                })
+            </script>
 
             <div id="chatBot" class="tabContent">
                 <div id="AxiaContainer" class="AxiaContainer">
@@ -224,6 +236,30 @@
                         <input id="inputMessage" type="text" placeholder="Message" autocomplete="off" autofocus>
                     </div>
                 </div>
+            </div>
+
+            <div id="ordersTable" class="tabContent">
+                <table class="orders-table">
+                    <tr>
+                        <th>Name</th>
+                        <th>Quantity</th>
+                        <th>Price</th>
+                        <th>Date</th>
+                    </tr>
+                    <?php
+                        foreach($orders as $items) {
+                    ?>
+                            <tr onclick="location.href = 'product_details.php?id=' +  <?php echo $items['id'];?>;">
+                                <td style="text-transform:Lowercase;"><?php echo $items['name'] ?></td>
+                                <td><?php echo $items['quantity'] ?></td>
+                                <td><?php echo $items['price'] ?></td>
+                                <td><?php echo $items['date'] ?></td>
+                            </tr>
+                    <?php
+                        }
+                    ?>
+                    
+                </table>           
             </div>
 
             <div id="myAccountLogout" class="tabContent">
@@ -241,7 +277,7 @@
                 <div class="detailCards">
                     <div class="card-single">
                         <div>
-                            <h1 style="font-family: 'Roboto Slab';">20</h1>
+                            <h1 style="font-family: 'Roboto Slab';"><?php echo count($orders)?></h1>
                             <span>Purchases</span>
                         </div>
                        
@@ -274,7 +310,6 @@
                         <span class="focus-border"></span>
                     </div>
                 </div>
-
             </div>
         </main>
     </div>

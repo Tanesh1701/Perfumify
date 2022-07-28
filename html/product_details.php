@@ -122,7 +122,7 @@
                     <?php
                       }
                     ?>
-                    <li><a href=""><span style="color:whitesmoke; font-size:22px;" class="material-icons-outlined">shopping_bag</span></a></li>
+                    <li><a href="cart.php"><span style="color:whitesmoke; font-size:22px;" class="material-icons-outlined">shopping_bag</span></a></li>
                 </ul>
             </nav>
         </div>
@@ -141,32 +141,6 @@
                     <a class="addToWishlist" data-data="<?php echo $product_data[0]['id'];?>" href="javascript:;"><span id="detailsIcon" class="material-icons"><?php echo $heartIcon ?></span></a>
                     <p style="font-family: 'Roboto Slab', serif;" class = "product-price">Rs <?php echo $product_data[0]['price'];?></p>
                     <hr style="margin-top: 40px;" class="detailsHr">
-                    <div>
-                    <p>Sizes</p>
-                    <p class="productSize">100ML</p>
-                    <span id="sizesIcon" class="material-icons">navigate_next</span>
-                    <div id="panelID" class="panel">
-                        <div class="panelFirstSection">
-                            <p class="panelHeader">Sizes</p>
-                            <div class="closePanelHolder">
-                                <span id="closePanelIcon" class="material-icons">close</span>
-                            </div>
-                            <hr class="panelSectionHr" style="margin-bottom: 100px;"> 
-                        </div>
-                        <div style="cursor: pointer;" class="panelSecondSection">
-                            <div class="size100">
-                                <p style="font-family: 'Roboto Slab', serif;" class="panelSize">100ml</p>
-                                <span id="selectedSize100" class="material-icons">done</span>
-                            </div>
-                            <hr class="panelSectionHr" style="width: 80%;">
-                            <div class="size200">
-                                <p style="font-family: 'Roboto Slab', serif;" class="panelSize">200ml</p>
-                                <span id="selectedSize200" class="material-icons">done</span>
-                            </div>
-                            <hr class="panelSectionHr" style="width: 80%;">
-                        </div>
-                    </div>
-                    </div>
                     <div class="productQtyDiv">
                         <p>Quantity</p>
                         <input id="cartQty" class="pQuantity" type="number" value="1" min="1" max="5">

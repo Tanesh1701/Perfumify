@@ -14,6 +14,7 @@
   $cartQuery = "select * from cart join products on cart.perfumeID = products.id where cart.userID = '$userId'";
   $cartData = display_product($con, $cartQuery);
   $cartLength = count($cartData);
+  $totalPrice = 0;
 
   $wishlistQuery = "select * from wishlist join products on wishlist.perfumeID = products.id where wishlist.userID = '$userId'";
   $likedProducts = display_product($con, $wishlistQuery);
@@ -74,7 +75,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Varela+Round&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <link rel="stylesheet" href="../style.css">
-    <title>Document</title>
+    <title>Perfumify: Cart</title>
 </head>
 <body>
     <header class="header" style="background-color: black; height: 100px;">  
@@ -140,7 +141,7 @@
                     <?php
                       }
                     ?>
-                    <li><a href=""><span style="color:whitesmoke; font-size:22px;" class="material-icons-outlined">shopping_bag</span></a></li>
+                    <li><a href="cart.php"><span style="color:whitesmoke; font-size:22px;" class="material-icons-outlined">shopping_bag</span></a></li>
                 </ul>
             </nav>
         </div>
@@ -176,17 +177,21 @@
                                     </div>
                                 </div>
                             </td>
-                            <td>
+                            <td class="inputDetailsToggle<?php echo $cartItem['id'] ?>">
                                 <span data-data="<?php echo $cartItem['id'] ?>" class="input-number-decrement">–</span><input id="inputQuantity" class="input-number" type="text" value="<?php echo $cartItem['quantity']?>" min="1" max="5"><span data-data="<?php echo $cartItem['id'] ?>" class="input-number-increment">+</span>
                             </td>
                             <td class = "unitPrice">Rs <?php echo $cartItem['price']?></td>
                             <td class="sub-total">Rs <?php echo ($cartItem['price'] * $cartItem['quantity'])?></td>
                         </tr>
+                        <?php
+                            $totalPrice = $totalPrice + ($cartItem['price'] * $cartItem['quantity']);
+                        ?>
                 <?php
                     }
                 ?>
             </table>
         </div>
+
 
         <script>
             $(document).ready(function() {
@@ -208,13 +213,18 @@
             $(document).ready(function() {
                 $('.input-number-decrement').on('click', function() {
                     var decrement = $(this).data('data');
+                    var item = $(this).parent().attr('class');
                     $.ajax({
                         url: "cart.php",
                         type: "POST",
                         data: ({decrement: decrement}),
                         success: function(data) {
                             if(data == "decremented") {
-                                
+                                //console.log($('td.' + item).next().next().html());
+                                var currentSubTotal = $('td.' + item).next().next().html().split(" ")[1]; //get current sub total and remove Rs
+                                var currentUnitPrice = $('td.' + item).next().html().split(" ")[1]; //get current unit price and remove Rs
+                                var total = currentSubTotal - currentUnitPrice; 
+                                $('td.' + item).next().next().html("Rs " + total);
                             }
                         }
                     })
@@ -224,13 +234,17 @@
             $(document).ready(function() {
                 $('.input-number-increment').on('click', function() {
                     var increment = $(this).data('data');
+                    var item = $(this).parent().attr('class');
                     $.ajax({
                         url: "cart.php",
                         type: "POST",
                         data: ({increment: increment}),
                         success: function(data) {
                             if(data == "incremented") {
-                            
+                                var currentSubTotal = $('td.' + item).next().next().html().split(" ")[1]; //get current sub total and remove Rs
+                                var currentUnitPrice = $('td.' + item).next().html().split(" ")[1]; //get current unit price and remove Rs
+                                var total = parseInt(currentSubTotal) + parseInt(currentUnitPrice); 
+                                $('td.' + item).next().next().html("Rs " + total);
                             }
                         }
                     })
@@ -241,12 +255,14 @@
 
         <div class="cartGroups">
             <div class="continueBrowsingContainer">
-                <span id="backIcon" class="material-icons">keyboard_backspace</span>
-                <p id="Continuebrowsing">Continue browsing</p>
+                <a style="text-decoration: none;" href="genderProducts.php"><p id="Continuebrowsing">Continue browsing</p></a>
             </div>
             <div class = "btn-groups">
-                <a style="text-decoration: none;" href="checkout.html"><button id="goToCheckoutBtn" type = "button" class = "buy-now-btn">Checkout</button></a>
+                <a style="text-decoration: none;" href="#"><button id="goToCheckoutBtn" type = "button" class = "buy-now-btn">Checkout</button></a>
             </div>
+            <form id="postTotal" action="checkout.php" method="POST">
+                <input type="hidden" name="price" value="">             
+            </form>
         </div>
     <?php
         } else {
@@ -256,7 +272,17 @@
         }
     ?>
 
-    <footer style = "height: 200px;"class = "footer">
+        <script>
+            $(document).ready(function() {
+                $('#goToCheckoutBtn').on('click', function() {
+                    var priceTotal = <?php echo $totalPrice ?>;
+                    $('[name="price"]').val(priceTotal);
+                    $("#postTotal").submit();
+                })
+            })
+        </script>
+
+    <footer style = "height: 250px;"class = "footer">
         <div class = "footerContainer">
             <div class = "footer-row">
                 <div class = "footer-col">

@@ -1178,6 +1178,21 @@ blockquote {
   border: none;
 }
 
+.filterBtn{
+  font-family: var(--font);
+  text-align: right;
+  display: flex;
+  cursor: pointer;
+  margin-left: 30px;
+  font-size: 20px;
+}
+
+.filterBtn span {
+  position: relative;
+  top: 20px;
+  right: 5px;
+}
+
 
 /* SiteMap */
 
@@ -1607,7 +1622,7 @@ blockquote {
 }
 
 .productQtyDiv {
-  margin-top: 40px;
+  margin-top: 20px;
 }
 
 .pQuantity{
@@ -1616,7 +1631,7 @@ blockquote {
   border: 1px solid #818078;
   position: absolute;
   left: 75%;
-  bottom: calc(35% - 24px);
+  top: 55%;
 }
 
 .pQuantity:focus {
@@ -1640,19 +1655,6 @@ blockquote {
   background-color: #EBE9E6;
   border-radius: 7px 7px 7px 7px;
   margin-top: -2px;
-}
-
-#selectedSize100{
-  position: absolute;
-  left: 80%;
-  top: 25%;
-}
-
-#selectedSize200{
-  position: absolute;
-  left: 80%;
-  top: calc(40% - 40px);
-  display: none;
 }
 
 .panelHeader{
@@ -1684,9 +1686,174 @@ blockquote {
 
 #closePanelIcon {
   position: absolute;
-  top: 50%;
+  top: 62%;
   left: 50%;
   transform: translate(-50%, -50%);
+}
+
+.filterBrandSection {
+  font-family: var(--font);
+}
+
+.filterBrandSection hr {
+  width: 30%;
+  margin-left: 0px;
+  margin-top: -15px;
+  margin-bottom: 30px;
+}
+
+.chkBoxContainer {
+  display: block;
+  position: relative;
+  left: 10px;
+  padding-left: 30px;
+  margin-bottom: 12px;
+  margin-top: 20px;
+  cursor: pointer;
+  font-size: 14px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  color: #383A3F;
+}
+
+.checkboxName {
+	position: relative;
+    top: -2px;
+}
+
+/* Hide the browser's default checkbox */
+.chkBoxContainer input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+/* Create a custom checkbox */
+.checkmark {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 12px;
+  width: 12px;
+  background-color: #fff;
+  outline: 3px solid #eee;
+  border-radius: 1px;
+}
+
+/* On mouse-over, add a grey background color */
+.chkBoxContainer:hover input ~ .checkmark {
+  outline: 1px solid #ff0065;
+}
+
+/* When the checkbox is checked, add a blue background */
+.chkBoxContainer input:checked ~ .checkmark {
+  background-color: #000;
+  transition: 0.3s all ease-in;
+}
+
+/* Create the checkmark/indicator (hidden when not checked) */
+.checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+/* Show the checkmark when checked */
+.chkBoxContainer input:checked ~ .checkmark:after {
+  display: block;
+}
+
+/* Style the checkmark/indicator */
+.chkBoxContainer .checkmark:after {
+  left: 3.5px;
+  top: 1px;
+  width: 2px;
+  height: 6px;
+  border: solid white;
+  border-width: 0px 3px 3px 0px;
+  -webkit-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  transform: rotate(45deg);
+}
+
+.priceFilterSection {
+  font-family: var(--font);
+  margin-top: 50px;
+}
+
+.priceFilterSection hr {
+  width: 30%;
+  margin-left: 0px;
+  margin-top: -15px;
+  margin-bottom: 30px;
+}
+
+.priceFilterIndicators {
+  font-size: 14px;
+  margin-left: 10px;
+}
+
+.rangeSlider {
+  margin-bottom: 30px;
+}
+
+.rangeSlider p {
+  font-family: var(--font);
+  font-size: 12px;
+  font-weight: 600;
+  padding-left: 30px;
+  color: black;
+  position: absolute;
+  left: 40%;
+}
+
+.rangeSlider input[type="range"] {
+  -webkit-appearance:none !important;
+  width: 200px;
+  height: 2px;
+  background: black;
+  border: none;
+  outline: none;
+  margin-left: 10px;
+}
+.rangeSlider input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none !important;
+  width: 12px;
+  height: 12px;
+  background: black;
+  border: 2px solid black;
+  border-radius: 50%;
+  cursor: pointer;
+}
+.rangeSlider input[type="range"]::-webkit-slider-thumb:hover {
+  background: black;
+}
+
+.filterBtns {
+  margin-top: 90px;
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.filterBtns button {
+  height: 40px;
+  width: 80px;
+  background-color: black;
+  color: whitesmoke;
+  font-family: var(--font);
+  font-weight: normal;
+  font-size: 14px;
+  transition: 0.3s all ease-in-out;
+  cursor: pointer;
+}
+
+.filterBtns button:hover {
+  background-color: whitesmoke;
+  color: black;
 }
 
 @media screen and (max-width: 992px){
@@ -1820,6 +1987,10 @@ blockquote {
   vertical-align: middle;
 }
 
+#Continuebrowsing:hover{
+  color:#ff0065;
+}
+
 .continueBrowsingContainer {
   display: flex;
   flex-wrap: wrap;
@@ -1855,7 +2026,7 @@ blockquote {
   left: 0;
   top: 0;
   height: 100%;
-  background: #DD2F6E;
+  background: #000;
   z-index: 100;
 }
 
@@ -1863,6 +2034,7 @@ blockquote {
   height: 90px;
   padding: 1rem 0rem 1rem 2rem;
   color: whitesmoke;
+  margin-left: -8px;
 }
 
 .sidebar-menu span {
@@ -1880,12 +2052,13 @@ blockquote {
   line-height: 2;
   font-size: 14px;
   letter-spacing: 1px;
+  
 }
 
 #dashboardQuoter{
   font-size: 13px;
   letter-spacing: 1px;
-  margin-left: 175px;
+  margin-left: 170px;
   margin-top: 8px;
 }
 
@@ -1893,7 +2066,7 @@ blockquote {
   background: white;
   padding-top: 1rem;
   padding-bottom: 1rem;
-  color: #DD2F6E;
+  color: #000;
   border-radius: 30px 0px 0px 30px;
 }
 
@@ -2030,6 +2203,79 @@ blockquote {
   right: 5%;
 }
 
+.orders-table {
+  margin: 1em 0;
+  min-width: 900px;
+  margin-left:auto;
+  margin-right:auto;
+}
+.orders-table tr {
+  border-top: 1px solid #ddd;
+  border-bottom: 1px solid #ddd;
+}
+.orders-table th {
+  display: none;
+}
+.orders-table td {
+  display: block;
+}
+.orders-table td:first-child {
+  padding-top: .5em;
+}
+.orders-table td:last-child {
+  padding-bottom: .5em;
+}
+.orders-table td:before {
+  content: attr(data-th) ": ";
+  font-weight: bold;
+  width: 9.5em;
+  display: inline-block;
+}
+@media (min-width: 480px) {
+  .orders-table td:before {
+    display: none;
+  }
+}
+.orders-tablee th, .orders-table td {
+  text-align: center;
+}
+@media (min-width: 480px) {
+  .orders-table th, .orders-table td {
+    display: table-cell;
+    padding: .25em .5em;
+  }
+  .orders-table th:first-child, .orders-table td:first-child {
+    padding-left: 0;
+  }
+  .orders-table th:last-child, .orders-table td:last-child {
+    padding-right: 0;
+  }
+}
+
+.orders-table {
+  background: #000;
+  color: #fff;
+  border-radius: .4em;
+  overflow: hidden;
+  font-size: 14px;
+  font-weight: normal;
+}
+.orders-table tr:hover {
+  color:#ff0065;
+  cursor: pointer;
+}
+.orders-table th, .orders-table td {
+  margin: .5em 1em;
+}
+@media (min-width: 480px) {
+  .orders-table th, .orders-table td {
+    padding: 1em !important;
+  }
+}
+.orders-table th, .orders-table td:before {
+  color: #ff0065;
+}
+
 
 /* My account Axia */
 
@@ -2160,6 +2406,18 @@ line-height: 1.5;
   outline: none;
 }
 
+#checkoutBtn-groups {
+  display: flex; 
+  justify-content: space-around; 
+  margin-top: 80px;
+}
+
+#checkoutBtn-groups button{
+  font-family: var(--font); 
+  font-size: 15px;
+  position: relative;
+}
+
 .item-flex {
   /* display: grid;
   grid-template-columns: 1fr 1fr; */
@@ -2172,6 +2430,13 @@ line-height: 1.5;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
   margin-top: 40px;
   
+}
+
+.order-summary-items {
+  font-size: 14px; 
+  color: #FF0065; 
+  margin-left: 160px; 
+  margin-top: 20px;
 }
 
 .summaryCartItems {
@@ -2368,4 +2633,36 @@ line-height: 1.5;
   text-align: center;
   font-weight: normal;
   text-decoration: underline;
+}
+
+/* Purchase success */
+.checkoutSuccessContainer hr {
+  border: 1px solid #FF0065;
+  background-color: #FF0065;
+  border-radius: 7px 7px 7px 7px;
+  width: 10%;
+  margin-bottom: 20px;
+}
+
+.checkoutSuccessContainer button {
+  width: 15%;
+  font-family: var(--font);
+  font-size: 14px;
+  margin:0 auto;
+  display:block;
+  margin-top: 100px;
+}
+
+.checkoutSuccessMsg {
+  font-family: var(--font);
+  margin: 0 auto;
+  text-align: center;
+  margin-top: 80px;
+  font-size: 18px;
+  font-weight: normal;
+  line-height: 1.5;
+}
+
+.checkoutSuccessMsg a {
+  color: #FF0065
 }

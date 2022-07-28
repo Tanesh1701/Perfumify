@@ -5,6 +5,7 @@
   include("../html/functions.php");
 
   $userId = 0;
+  
   $user = check_login($con);
   if(isset($user['id'])) {
     $userId = $user['id'];
@@ -13,32 +14,35 @@
   $wishlistQuery = "select * from wishlist join products on wishlist.perfumeID = products.id where wishlist.userID = '$userId'";
   $likedProducts = display_product($con, $wishlistQuery);
 
-  if(isset($_POST['submit'])) {
-    ini_set('SMTP', "server.com");
-    ini_set('smtp_port', "25");
-    $name = $_POST['contactUser'];
-    $email = $_POST['contactEmail'];
-    $message = $_POST['message'];
-    $receiver = "perfumify.website@gmail.com";
-    $subject = "Query/Feedback regarding Perfumify";
-    $message = $name . " ". $email. " wrote the following:" . "\n\n" . $message;
-    $headers = "From:" . $email;
-    mail($receiver,$subject,$message,$headers);
+  if(isset($_POST['addToOrders'])) {
+    $perfumeId = 0;
+    $perfumeQuantity = 0;
+    $date = date('Y-m-d H:i:s');
+    $cartQuery = "select * from cart join products on cart.perfumeID = products.id where cart.userID = '$userId'";
+    $cartData = display_product($con, $cartQuery);
+    foreach($cartData as $item) {
+        $perfumeId = $item['perfumeID'];
+        $perfumeQuantity = $item['quantity'];
+        $cartId = $item['id'];
+        $query = "insert into orderdetails (userID,perfumeID,quantity,date) values ('$userId', '$perfumeId', '$perfumeQuantity', '$date')";
+        $result = mysqli_query($con, $query);
+        $deleteQuery = "delete from cart where userID = '$userId'";
+        $deleteResult = mysqli_query($con, $deleteQuery);
+    }
+    exit();
   }
-
 ?>
 
-<!DOCTYPE html>
+
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://fonts.googleapis.com/css2?family=Varela+Round&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css?family=Material+Icons|Material+Icons+Outlined|Material+Icons+Two+Tone|Material+Icons+Round|Material+Icons+Sharp" rel="stylesheet">
     <link rel="stylesheet" href="../style.css">
-    <title>Perfumify: Contact Us</title>
+    <title>Perfumify: Purchase Successful</title>
 </head>
 <body>
     <header class="header" style="background-color: black; height: 100px;">  
@@ -109,87 +113,19 @@
             </nav>
         </div>
     </header>
-    
-    <section class="contactMeSection">
-        <div class="contactMeForm">
-            <h2>Get In Touch With Us !</h2>
-            <form action="contact_us.php" method="post">
-                <div class="input-group">
-                    <input type="text" name="contactUser" id="contactUser" required>
-                    <label for="contactUser">Full name</label>
-                </div>
-                <div class="input-group">
-                    <input type="text" name="contactEmail" id="contactEmail" required>
-                    <label for="contactEmail">Email</label>
-                </div>
-                <div style="padding-top: 10px;" class="input-group">
-                    <textarea name="message" id="" cols="30" rows="10"></textarea>
-                    <label style="padding-top: 15px;" for="contactMessage">Message</label>
-                </div>
-                <input type="submit" name="submit" value="Send Message" class="submit-btn">
-            </form>
-        </div>
-        <div class="contactDetails">
-            <div>
-                <h4>Address</h4>
-                <p>46th Avenue, New York</p>
-            </div>
-            <div>
-                <h4>Email</h4>
-                <p>perfumify@perfumify.com</p>
-            </div>
-            <div>
-                <h4>Phone</h4>
-                <p>+1 (646) 555-3890</p>
-            </div>
-            <div>
-                <h4>Fax</h4>
-                <p>+1 (212) 222 8888</p>
-            </div>
-        </div>
-    </section>
 
-    <footer style = "height: 300px;"class = "footer">
-        <div class = "footerContainer">
-            <div class = "footer-row">
-                <div class = "footer-col">
-                    <h4>Perfumify</h4>
-                    <ul style = "position: relative; right: 40px">
-                        <li><a href="about.php">About Us</a></li>
-                        <li><a href="contact_us.php">Contact Us</a></li>
-                        <li><a href="sitemap.php">Site Map</a></li>
-                        <li><a href="faq.php">FAQ</a></li>
-                    </ul>
-                </div>
-                <div class = "footer-col">
-                    <h4>Shop Now</h4>
-                    <ul style = "position: relative; right: 40px">
-                        <li><a href="genderProducts.php?gender=male">Men's Perfumes</a></li>
-                        <li><a href="genderProducts.php?gender=female">Women's Perfumes</a></li>
-                        <li><a href="brand.php?brand=Chanel">Chanel</a></li>
-                        <li><a href="brand.php?brand=Gucci">Gucci</a></li>
-                        <li><a href="brand.php?brand=Jo Malone">Joe Malone</a></li>
-                        <li><a href="brand.php?brand=Louis Vuitton">Louis Vuitton</a></li>
-                        <li><a href="brand.php?brand=Prada">Prada</a></li>
-                        <li><a href="brand.php?brand=Ralph Lauren">Ralph Lauren</a></li>
-                    </ul>
-                </div>
-                <div class = "footer-col">
-                    <h4>Main HQ</h4>
-                    <p>+1 (646) 555-3890</p>
-                    <p>46th Avenue, New York</p>
-                </div>
-                <div class = "footer-col">
-                    <h4>Follow Us</h4>
-                    <div class = "social-links">
-                        <a href=""><i class = "fab fa-facebook-f"></i></a>
-                        <a href=""><i class = "fab fa-twitter"></i></a>
-                        <a href=""><i class = "fab fa-instagram"></i></a>
-                    </div>
-                </div>
-            </div>
+    <div class="checkoutSuccessContainer">
+        <h2 class="title">
+            Thank you for shopping with us!
+        </h2>
+        <hr>
+        <div class="checkoutSuccessMsg">
+          <h5>We hope to see you again <?php echo $user['user_name'] ?>!</h5>
+          <h5>If there were any issues, please let us <a href="contact_us.php">know</a>!</h5>
         </div>
-    </footer>
-
+        <div class = "btn-groups">
+            <a style="text-decoration: none;" href="genderProducts.php"><button id="" type = "button" class = "buy-now-btn">Browse some more</button></a>
+        </div>
+    </div>
 </body>
 </html>

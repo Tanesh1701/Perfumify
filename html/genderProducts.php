@@ -5,15 +5,23 @@
     include("../html/functions.php");
 
     $userId = 0;
-    $query = "select * from products";
     $title = "All Perfumes";
-
     $heartIcon = "favorite_border";
     $user = check_login($con);
+    $gender = "";
+    $query = "";
+    
+    if(isset($user['id'])) {
+        $userId =  $user['id'];
+    }
 
     if(isset($_GET['gender'])) {
         $gender = $_GET['gender'];
-        $query = "select * from products where sex = '$gender'";
+        if ($gender == "all") {
+            $query = "select * from products";
+        } else {
+            $query = "select * from products where sex = '$gender'";
+        }
         if ($gender == "male") {
             $title = "Men's Perfumes";
         } else if($gender == "female") {
@@ -22,11 +30,160 @@
     }
     $product_data = display_product($con, $query);
 
-    if(isset($user['id'])) {
-        $userId =  $user['id'];
-    }
     $wishlistQuery = "select * from wishlist join products on wishlist.perfumeID = products.id where wishlist.userID = '$userId'";
     $likedProducts = display_product($con, $wishlistQuery);
+?>
+<?php
+    if(isset($_POST['minimumPrice']) and isset($_POST['maximumPrice'])) {
+        $minPrice = $_POST['minimumPrice'];
+        $maxPrice = $_POST['maximumPrice'];
+        $filterPricesQuery = "";
+
+        if($gender == "all") {
+            $filterPricesQuery = "select * from products where price >= '$minPrice' and price <= '$maxPrice'";
+        } else {
+            $filterPricesQuery = "select * from products where sex='$gender' and price >= '$minPrice' and price <= '$maxPrice'";
+        }
+        $filteredPricesResult = display_product($con, $filterPricesQuery);
+        if (count($filteredPricesResult) != 0) {
+            foreach($filteredPricesResult as $row) {
+?>
+            <div class="perfumes">
+                <img class="image" src="<?php echo $row['location'];?>" alt= "<?php echo $row['name'];?>" onclick = "location.href = 'product_details.php?id=' +  <?php echo $row['id'];?>;">
+                <?php
+                    foreach($likedProducts as $liked) {
+                        if($row['id'] == $liked['id']) {
+                            $heartIcon = "favorite";
+                            break;
+                            
+                ?>
+                        <?php
+                        } else {
+                            $heartIcon = "favorite_border";
+                        ?>
+
+                        <?php
+                        }
+                        ?>
+
+                <?php
+                    }
+                ?>
+                <a class="addToWishlist" data-data="<?php echo $row['id'];?>" href="javascript:;"><span class="material-icons"><?php echo $heartIcon ?></span></a>
+                <div class="container" onclick = "location.href = 'product_details.php?id=' +  <?php echo $row['id'];?>;">
+                    <h4><b><?php echo $row['name'];?></b></h4>
+                    <p>Rs <?php echo $row['price'];?></p>
+                </div>
+            </div>
+            <?php
+            }
+            ?>
+
+<?php
+        } else {
+            echo "<h3 style='position:absolute; left: 45%;' class='noResults'>No results found!</h3>";
+        }
+        exit();
+    }
+
+?>
+
+<?php
+    if(isset($_POST['reset'])) {
+        if (count($product_data) != 0) {
+            foreach($product_data as $row) {
+?>
+            <div class="perfumes">
+                <img class="image" src="<?php echo $row['location'];?>" alt= "<?php echo $row['name'];?>" onclick = "location.href = 'product_details.php?id=' +  <?php echo $row['id'];?>;">
+                <?php
+                    foreach($likedProducts as $liked) {
+                        if($row['id'] == $liked['id']) {
+                            $heartIcon = "favorite";
+                            break;
+                            
+                ?>
+                        <?php
+                        } else {
+                            $heartIcon = "favorite_border";
+                        ?>
+
+                        <?php
+                        }
+                        ?>
+
+                <?php
+                    }
+                ?>
+                <a class="addToWishlist" data-data="<?php echo $row['id'];?>" href="javascript:;"><span class="material-icons"><?php echo $heartIcon ?></span></a>
+                <div class="container" onclick = "location.href = 'product_details.php?id=' +  <?php echo $row['id'];?>;">
+                    <h4><b><?php echo $row['name'];?></b></h4>
+                    <p>Rs <?php echo $row['price'];?></p>
+                </div>
+            </div>
+            <?php
+            }
+            ?>
+
+<?php
+        } else {
+            echo "<h3 class='noResults'>No results found!</h3>";
+        }
+        exit();
+    }
+
+?>
+
+<?php
+    if(isset($_POST['brandFilter'])) {
+        $brandFilters = implode("','", $_POST['brandFilter']); //creates a string with , as separator
+        $brandQuery = "";
+        if($gender == "all") {
+            $brandQuery = "select * from products where brand in ('$brandFilters')"; //in for multiple where clauses
+        } else {
+            $brandQuery = "select * from products where sex='$gender' and brand in ('$brandFilters')"; 
+        }
+        $product_data = display_product($con, $brandQuery);
+        if (count($product_data) != 0) {
+            foreach($product_data as $row) {
+?>
+            <div class="perfumes">
+                <img class="image" src="<?php echo $row['location'];?>" alt= "<?php echo $row['name'];?>" onclick = "location.href = 'product_details.php?id=' +  <?php echo $row['id'];?>;">
+                <?php
+                    foreach($likedProducts as $liked) {
+                        if($row['id'] == $liked['id']) {
+                            $heartIcon = "favorite";
+                            break;
+                            
+                ?>
+                        <?php
+                        } else {
+                            $heartIcon = "favorite_border";
+                        ?>
+
+                        <?php
+                        }
+                        ?>
+
+                <?php
+                    }
+                ?>
+                <a class="addToWishlist" data-data="<?php echo $row['id'];?>" href="javascript:;"><span class="material-icons"><?php echo $heartIcon ?></span></a>
+                <div class="container" onclick = "location.href = 'product_details.php?id=' +  <?php echo $row['id'];?>;">
+                    <h4><b><?php echo $row['name'];?></b></h4>
+                    <p>Rs <?php echo $row['price'];?></p>
+                </div>
+            </div>
+            <?php
+            }
+            ?>
+
+<?php
+        } else {
+            echo "<h3 style='position:absolute; left: 45%;' class='noResults'>No results found!</h3>";
+        }
+        exit();
+    }
+
 ?>
 
 <html lang="en">
@@ -107,13 +264,78 @@
                     <?php
                       }
                     ?>
-                    <li><a href=""><span style="color:whitesmoke; font-size:22px;" class="material-icons-outlined">shopping_bag</span></a></li>
+                    <li><a href="cart.php"><span style="color:whitesmoke; font-size:22px;" class="material-icons-outlined">shopping_bag</span></a></li>
                 </ul>
             </nav>
         </div>
     </header>
 
     <h1 class="title"><?php echo $title ?></h1>
+
+    <div class="filterContainer">
+        <div class="filterBtn">
+            <span class="material-icons">tune</span>
+            <p>Filter</p>
+        </div>
+        <div id="panelID" class="panel">
+            <div class="panelFirstSection">
+                <p class="panelHeader">Filter</p>
+                <div class="closePanelHolder">
+                    <span id="closePanelIcon" class="material-icons">close</span>
+                </div>
+                <hr class="panelSectionHr" style="margin-bottom: 50px;">
+                <div class="filterBrandSection">
+                    <p style="margin-left: 25px;">Brands</p>
+                    <hr class="panelSectionHr">
+                    <form action="" method="post">
+                        <label class="chkBoxContainer"><span class="checkboxName">Chanel</span>
+                            <input name="chkBox" type="checkbox" value="Chanel">
+                            <span class="checkmark"></span>
+                        </label>
+                        <label class="chkBoxContainer"><span class="checkboxName">Gucci</span>
+                            <input name="chkBox" type="checkbox" value="Gucci">
+                            <span class="checkmark"></span>
+                        </label>
+                        <label class="chkBoxContainer"><span class="checkboxName">Jo Malone</span>
+                            <input name="chkBox" type="checkbox" value="Jo Malone">
+                            <span class="checkmark"></span>
+                        </label>
+                        <label class="chkBoxContainer"><span class="checkboxName">Louis Vuitton</span>
+                            <input name="chkBox" type="checkbox" value="Louis Vuitton">
+                            <span class="checkmark"></span>
+                        </label>
+                        <label class="chkBoxContainer"><span class="checkboxName">Prada</span>
+                            <input name="chkBox" type="checkbox" value="Prada">
+                            <span class="checkmark"></span>
+                        </label>
+                        <label class="chkBoxContainer"><span class="checkboxName">Ralph Lauren</span>
+                            <input name="chkBox" type="checkbox" value="Ralph Lauren">
+                            <span class="checkmark"></span>
+                        </label>
+                    </form>
+                    
+                </div>
+                <div class="priceFilterSection">
+                    <p style="margin-left: 25px;">Price</p>
+                    <hr class="panelSectionHr">
+                    <p class="priceFilterIndicators">Min</p>
+                    <div class="rangeSlider">
+                        <input id="minPrice" type="range" min="1500" max="15000" value="1500" step="500" oninput="rangeValue.innerText = this.value">
+                        <p id="rangeValue">1500</p>
+                    </div>
+                    <p class="priceFilterIndicators">Max</p>
+                    <div class="rangeSlider">
+                        <input id="maxPrice" type="range" min="1500" max="15000" value="15000" step="500" oninput="rangeValue2.innerText = this.value">
+                        <p id="rangeValue2">15000</p>
+                    </div>
+                </div>
+                <div class="filterBtns">
+                    <button class="resetFilterBtn">Reset</button>
+                    <button class="filterContentBtn">Filter</button>
+                </div> 
+            </div>
+        </div>
+    </div>
 
     
     <div class="perfumeList">
@@ -154,6 +376,58 @@
         ?>
     </div>
 
+    <script>
+        $(document).ready(function() {
+            function getPriceRange() {
+                var minPrice = $('#minPrice').val();
+                var maxPrice = $('#maxPrice').val();
+    
+                $.ajax({
+                    url: "genderProducts.php?gender=<?php echo $gender ?>",
+                    type: "POST",
+                    data: ({minimumPrice: minPrice, maximumPrice: maxPrice}),
+                    success: function(data) {
+                        console.log(data);
+                        $('.perfumeList').html('');
+                        $('.perfumeList').html(data);
+                    }
+                })
+            }
+            function getChkboxStatus() {
+                var arrchkbox= [];
+                $("input[name='chkBox']:checked").each(function() {
+                    arrchkbox.push($(this).val());
+                })
+                if(arrchkbox.length != 0) {
+                    $.ajax({
+                        url: "genderProducts.php?gender=<?php echo $gender ?>",
+                        type: "POST",
+                        data: ({brandFilter: arrchkbox}),
+                        success: function(data) {
+                            $('.perfumeList').html('');
+                            $('.perfumeList').html(data);
+                        }
+                    })
+                }
+            }
+            $('.filterContentBtn').on('click', function() {
+                getPriceRange();
+                getChkboxStatus();
+            })
+            $('.resetFilterBtn').on('click', function() {
+                $.ajax({
+                    url: "genderProducts.php?gender=<?php echo $gender ?>",
+                    type: "POST",
+                    data: ({reset: "resetFilters"}),
+                    success: function(data) {
+                        $('.perfumeList').html('');
+                        $('.perfumeList').html(data);
+                        $("input[name='chkBox']:checked").prop('checked', false);
+                    }
+                })
+            })
+        });
+    </script>
 
     <script>
         $(document).ready(function() {

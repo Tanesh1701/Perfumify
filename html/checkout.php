@@ -5,6 +5,7 @@
   include("../html/functions.php");
 
   $userId = 0;
+  
   $user = check_login($con);
   if(isset($user['id'])) {
     $userId = $user['id'];
@@ -13,10 +14,16 @@
   $wishlistQuery = "select * from wishlist join products on wishlist.perfumeID = products.id where wishlist.userID = '$userId'";
   $likedProducts = display_product($con, $wishlistQuery);
 
+  $totalPrice = 0;
+  $cartData = [];
+  if(isset($_POST['price'])) {
+    $totalPrice = $_POST['price'];
+    //$cartData = json_decode(stripslashes($_POST['cartArray']), true);
+    $cartQuery = "select * from cart join products on cart.perfumeID = products.id where cart.userID = '$userId'";
+    $cartData = display_product($con, $cartQuery);
+  }
 ?>
 
-
-<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
@@ -24,10 +31,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://fonts.googleapis.com/css2?family=Varela+Round&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/js-base64@3.7.2/base64.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css?family=Material+Icons|Material+Icons+Outlined|Material+Icons+Two+Tone|Material+Icons+Round|Material+Icons+Sharp" rel="stylesheet">
     <link rel="stylesheet" href="../style.css">
-    <title>Document</title>
+    <title>Perfumify: Checkout</title>
 </head>
 <body>
     <header class="header" style="background-color: black; height: 100px;">  
@@ -93,18 +102,17 @@
                     <?php
                       }
                     ?>
-                    <li><a href=""><span style="color:whitesmoke; font-size:22px;" class="material-icons-outlined">shopping_bag</span></a></li>
+                    <li><a href="cart.php"><span style="color:whitesmoke; font-size:22px;" class="material-icons-outlined">shopping_bag</span></a></li>
                 </ul>
             </nav>
         </div>
     </header>
     <main class="checkoutContainer">
         <h2 class="CheckoutHeading">
-            Thank you for shopping with us!
+            Checkout
         </h2>
         <hr>
         <div class="item-flex">
-
             <section class="checkout">
                 <h2 class="sectionCheckoutHeader">
                     Payment Details
@@ -115,7 +123,7 @@
                         <form action="">
                             <div style="float:none; width: 50%;" class="col-3">
                                 <label for="">Name:</label>
-                                <input class="effect-1" type="text">
+                                <input id="fullNameCheckout" class="effect-1" type="text">
                                 <span class="focus-border"></span>
                             </div>
                             <br>
@@ -147,12 +155,12 @@
                                 <br>
                                 <div style="float:none; width: 50%;" class="col-3">
                                     <label for="">City:</label>
-                                    <input class="effect-1" type="text">
+                                    <input id="cityCheckout" class="effect-1" type="text">
                                     <span class="focus-border"></span>
                                 </div>
                                 <div style="float:none; width: 50%;" class="col-3">
                                     <label for="">Street:</label>
-                                    <input class="effect-1" type="text">
+                                    <input id="streetCheckout" class="effect-1" type="text">
                                     <span class="focus-border"></span>
                                 </div>
                             </div>
@@ -163,62 +171,28 @@
             </section>
 
             <section class="order-summary">
-                <h2 style="margin-top: 10px; margin-left: 5px;" class="sectionCheckoutHeader">
+                <h2 style="margin-left: 5px;" class="sectionCheckoutHeader">
                     Order Summary
                 </h2>
-                <p style="font-size: 14px; color: #FF0065; margin-left: 160px; margin-top: 30px;">5 items</p>
+                <p class="order-summary-items"><?php echo count($cartData) ?> items</p>
                 <br>
                 <div class="summaryCartItems">
+                    <?php
+                    foreach($cartData as $item) {
+                    ?>
                     <div class="shoppingCartSummary">
                         <div class="itemSummary">
-                            <img src="../images/men's perfumes/jm_blackberry&bay.png" alt="">
+                            <img src="<?php echo $item['location'] ?>" alt="">
                             <div>
-                                <p class="summaryItemName"> 1 x Blackberry & Bay</p>
-                                <p style="font-size: 13px;">Joe Malone</p>
+                                <p class="summaryItemName"> <?php echo $item['quantity']?> x <?php echo $item['name'] ?></p>
+                                <p style="font-size: 13px;"><?php echo $item['brand'] ?></p>
                             </div>
-                            <p class="cartSummaryPrice">Rs 8000</p>
+                            <p class="cartSummaryPrice">Rs <?php echo ($item['price'] * $item['quantity'])?></p>
                         </div>
                     </div>
-                    <div class="shoppingCartSummary">
-                        <div class="itemSummary">
-                            <img src="../images/men's perfumes/jm_bronzewood&leather.png" alt="">
-                            <div>
-                                <p class="summaryItemName"> 1 x Bronzewood & Leather</p>
-                                <p style="font-size: 13px;">Joe Malone</p>
-                            </div>
-                            <p class="cartSummaryPrice">Rs 8000</p>
-                        </div>
-                    </div>
-                    <div class="shoppingCartSummary">
-                        <div class="itemSummary">
-                            <img src="../images/men's perfumes/lv_afternoon_swim.jpeg" alt="">
-                            <div>
-                                <p class="summaryItemName"> 1 x Afternoon Swim</p>
-                                <p style="font-size: 13px;">Louis Vuitton</p>
-                            </div>
-                            <p class="cartSummaryPrice">Rs 8000</p>
-                        </div>
-                    </div>
-                    <div class="shoppingCartSummary">
-                        <div class="itemSummary">
-                            <img src="../images/men's perfumes/rl_poloblack_men.png" alt="">
-                            <div>
-                                <p class="summaryItemName">1 x Polo Black</p>
-                                <p style="font-size: 13px;">Ralph Lauren</p>
-                            </div>
-                            <p class="cartSummaryPrice">Rs 8000</p>
-                        </div>
-                    </div>
-                    <div class="shoppingCartSummary">
-                        <div class="itemSummary">
-                            <img src="../images/men's perfumes/prada_lhomme_men.png" alt="">
-                            <div>
-                                <p class="summaryItemName">1 x L'homme</p>
-                                <p style="font-size: 13px;">Prada</p>
-                            </div>
-                            <p class="cartSummaryPrice">Rs 8000</p>
-                        </div>
-                    </div>
+                    <?php
+                    }
+                    ?>
                 </div>
                 <div class="summaryTotals">
                     <div class="priceLabels">
@@ -226,25 +200,112 @@
                         <p>Shipping Charges</p>
                     </div>
                     <div>
-                        <p>Rs 40000</p>
+                        <p>Rs <?php echo $totalPrice ?></p>
                         <p>Rs 200</p>
                     </div>
                 </div>
                 <hr class="detailsHr" style="width: 100%; border: 1px solid #d2d2d2; background-color: #d2d2d2;">
                 <div class="summaryFinalTotal">
                     <p>Total</p>
-                    <p>Rs 40200</p>
+                    <p>Rs <?php echo $totalPrice+200 ?></p>
                 </div>
             </section>
         </div>
-        <div class = "btn-groups" style="display: flex; justify-content: space-around; margin-top: 80px;">
+        <div id="checkoutBtn-groups" class = "btn-groups">
             <a href="cart.html">
-                <button style="font-family: var(--font); font-size: 15px; width: 275%; position: relative; left: -150px;" type = "button" class = "buy-now-btn">Cancel</button>
+                <button style=" width: 275%; left: -150px;" type = "button" class = "buy-now-btn">Cancel</button>
             </a>
             
-            <button style="font-family: var(--font); font-size: 15px; width: 20%;" id="receiptButton" type = "button" class = "buy-now-btn">Confirm & Generate Receipt</button>
+            <button style="width: 20%; left: 20px;" id="receiptButton" type = "button" class = "buy-now-btn">Confirm & Generate Receipt</button>
         </div>
     </main>
+
+    <script>
+        var today = new Date();
+        var dd = String(today.getDate()).padStart(2, '0');
+        var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+        var yyyy = today.getFullYear();
+        today = mm + '/' + dd + '/' + yyyy;
+        window.jsPDF = window.jspdf.jsPDF
+
+        $('#receiptButton').on('click', function() {
+            var fullName = document.getElementById("fullNameCheckout").value;
+            var country = document.getElementById("selectCountry").options[document.getElementById("selectCountry").selectedIndex].text; //get country selected
+            var street = document.getElementById("streetCheckout").value;
+            var city = document.getElementById("cityCheckout").value;
+            const doc = new jsPDF();
+
+            doc.setFont("Helvetica", "bold");
+            doc.setFontSize(20);
+            doc.text("Perfumify", 10, 10);
+            doc.setDrawColor(0);
+            doc.setFillColor(255,0,101);
+            doc.rect(200, 4, 3, 3, 'F');
+            doc.setFont("Helvetica", "normal");
+            doc.setFontSize(10);
+            doc.setTextColor("#B2B2AF");
+            doc.text("Thank you for shopping with Perfumify!", 10, 20);
+            doc.text("Your order has successfully been processed", 10, 30);
+            doc.setDrawColor(0, 0, 0);
+            doc.setLineWidth(1.0); 
+            doc.line(10, 40, 200, 40);
+            doc.setTextColor("#000000");
+            doc.text("Date: ", 150, 50);
+            doc.setTextColor("#B2B2AF");
+            doc.text(today, 162, 50);
+            doc.setTextColor("#000000");
+            doc.text("Name: ", 150, 60);
+            doc.setTextColor("#B2B2AF");
+            doc.text(fullName, 162, 60);
+            doc.setTextColor("#000000");
+            doc.text("Country: ", 150, 70);
+            doc.setTextColor("#B2B2AF");
+            doc.text(country, 165, 70);
+            doc.setTextColor("#000000");
+            doc.text("City: ", 150, 80);
+            doc.setTextColor("#B2B2AF");
+            doc.text(city, 162, 80);
+            doc.setTextColor("#000000");
+            doc.text("Street: ", 150, 90);
+            doc.setTextColor("#B2B2AF");
+            doc.text(street, 162, 90);
+            doc.setLineWidth(0.3);
+            doc.line(10, 100, 200, 100);
+            doc.setTextColor("#000000");
+            doc.setFontSize(12);
+            <?php
+                $ycoordinate = 70;
+                foreach($cartData as $cartItem) {
+                    $ycoordinate += 50;
+            ?>
+                    var quantity = "<?php echo $cartItem['quantity'] ?>";
+                    var name = "<?php echo $cartItem['name'] ?>"
+                    var subTotalPrice = <?php echo $cartItem['price'] ?> * <?php echo $cartItem['quantity'] ?>;
+                    doc.text(quantity, 10, <?php echo $ycoordinate ?>);
+                    doc.text("x", 15, <?php echo $ycoordinate ?>)
+                    doc.text(name, 20, <?php echo $ycoordinate ?>);
+                    doc.text("Rs " + subTotalPrice.toString(), 180, <?php echo $ycoordinate ?>)
+            <?php     
+                }
+            ?>
+            doc.line(10, 240, 200, 240);
+            doc.text("Total Cost: ", 150, 255);
+            doc.text("Rs <?php echo $totalPrice ?>", 180, 255);
+            doc.setLineWidth(1.0);
+            doc.setDrawColor(255, 0, 101);
+            doc.line(10, 270, 200, 270);
+            doc.save("PerfumifyReceipt.pdf");
+
+            $.ajax({
+                url: "purchase_success.php",
+                type: "POST",
+                data: ({addToOrders: "addtoDB"}),
+                success: function(data) {
+                    window.location.href = "purchase_success.php"
+                }
+            })
+        })
+    </script>
 
     <footer style = "height: 300px; margin-top: 120px;"class = "footer">
         <div class = "footerContainer">
