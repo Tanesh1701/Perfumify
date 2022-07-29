@@ -28,4 +28,4 @@
 - Shopping Cart
 >![Cart](screenshots/ShoppingCart.png)
 - Checkout
->![Checkout](screenshots/checkout.png)
+>![Checkout](screenshots/Checkout.png)
