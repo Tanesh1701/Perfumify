@@ -250,7 +250,7 @@
                           <div class="row">
                             <div class="column">
                               <h3>General</h3>
-                              <a href="genderProducts.php">All Products</a>
+                              <a href="genderProducts.php?gender=all">All Products</a>
                               <a href="genderProducts.php?gender=male">Men</a>
                               <a href="genderProducts.php?gender=female">Women</a>
                             </div>
